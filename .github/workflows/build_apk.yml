@@ -13,16 +13,16 @@ jobs:
 
     steps:
       - name: Checkout Source
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
 
       - name: Setup Java
-        uses: actions/setup-java@v3
+        uses: actions/setup-java@v4
         with:
           distribution: 'temurin'
           java-version: '17'
 
       - name: Setup Node.js
-        uses: actions/setup-node@v3
+        uses: actions/setup-node@v4
         with:
           node-version: '20'
           cache: 'npm'
@@ -42,8 +42,22 @@ jobs:
           chmod +x gradlew
           ./gradlew assembleDebug
 
+      - name: Zip Build Assets (Ready-for-Cloud-Build)
+        if: always()
+        run: |
+          zip -r ready-for-cloud-build.zip android dist package.json
+
       - name: Upload APK
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
-          name: easy-billing-pos-debug
+          name: build-artifacts-${{ github.run_id }}
           path: android/app/build/outputs/apk/debug/app-debug.apk
+          include-hidden-files: true
+
+      - name: Upload Build Assets Zip
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: ready-for-cloud-build-${{ github.run_id }}
+          path: ready-for-cloud-build.zip
+          include-hidden-files: true
