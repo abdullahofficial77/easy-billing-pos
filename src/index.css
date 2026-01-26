@@ -83,11 +83,7 @@ html {
     -webkit-tap-highlight-color: transparent;
 }
 
-@media (min-width: 768px) {
-    html {
-        font-size: 15px;
-    }
-}
+
 
 body {
     font-family: var(--font-family);
@@ -176,19 +172,7 @@ h4 {
     overflow-x: hidden;
 }
 
-/* Desktop: Sidebar layout */
-@media (min-width: 768px) {
-    .app-container {
-        flex-direction: row;
-    }
 
-    .main-content {
-        padding-bottom: var(--spacing-md);
-        padding-left: var(--content-start-x);
-        padding-right: var(--spacing-lg);
-        max-width: calc(var(--content-max-width) + var(--content-start-x) + var(--spacing-lg));
-    }
-}
 
 /* ===================================
    Bottom Navigation (Mobile)
@@ -240,76 +224,9 @@ h4 {
     color: var(--color-text-primary);
 }
 
-@media (min-width: 768px) {
-    .bottom-nav {
-        display: none;
-    }
-}
 
-/* ===================================
-   Sidebar (Desktop)
-   =================================== */
 
-.sidebar {
-    display: none;
-    position: fixed;
-    left: 0;
-    top: 0;
-    bottom: 0;
-    width: var(--sidebar-width);
-    background: var(--color-bg-secondary);
-    border-right: 1px solid var(--color-border);
-    padding: var(--spacing-lg);
-    z-index: 100;
-}
 
-.sidebar-logo {
-    font-size: 1.25rem;
-    font-weight: 700;
-    color: var(--color-accent);
-    margin-bottom: var(--spacing-xl);
-    padding: var(--spacing-sm) 0;
-}
-
-.sidebar-nav {
-    display: flex;
-    flex-direction: column;
-    gap: var(--spacing-sm);
-}
-
-.sidebar-item {
-    display: flex;
-    align-items: center;
-    gap: var(--spacing-md);
-    padding: var(--spacing-md);
-    color: var(--color-text-secondary);
-    text-decoration: none;
-    font-weight: 500;
-    border-radius: var(--radius-md);
-    transition: all var(--transition-fast);
-}
-
-.sidebar-item svg {
-    width: 22px;
-    height: 22px;
-    flex-shrink: 0;
-}
-
-.sidebar-item:hover {
-    background: var(--color-bg-card);
-    color: var(--color-text-primary);
-}
-
-.sidebar-item.active {
-    background: var(--color-accent-light);
-    color: var(--color-accent);
-}
-
-@media (min-width: 768px) {
-    .sidebar {
-        display: block;
-    }
-}
 
 /* ===================================
    PIN Lock Screen
@@ -786,12 +703,7 @@ h4 {
     z-index: 50;
 }
 
-@media (min-width: 768px) {
-    .bill-footer {
-        bottom: 0;
-        left: var(--sidebar-width);
-    }
-}
+
 
 .bill-totals {
     display: grid;
