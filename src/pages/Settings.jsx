@@ -248,307 +248,306 @@ export default function Settings() {
 
     return (
         <div>
-            <div>
-                <div className="sticky-header page-header">
-                    <h1 className="page-title">Settings</h1>
-                </div>
+            <div className="sticky-header page-header">
+                <h1 className="page-title">Settings</h1>
+            </div>
 
-                <div className="settings-container">
-                    {/* LEFT COLUMN: Settings Forms */}
-                    <div className="settings-main">
-                        <div className="card mb-md">
-                            <h2 className="text-lg font-bold mb-md">Store Information</h2>
-                            <div style={{ display: 'flex', gap: '15px' }}>
-                                <div className="input-group mb-md" style={{ flex: '0 0 65%' }}>
-                                    <label className="input-label">Store Name</label>
-                                    <input
-                                        type="text"
-                                        className="input"
-                                        value={settings.storeName}
-                                        onChange={(e) => setSettings({ ...settings, storeName: e.target.value })}
-                                    />
-                                </div>
-                                <div className="input-group mb-md" style={{ flex: '1' }}>
-                                    <label className="input-label">Phone</label>
-                                    <input
-                                        type="text"
-                                        className="input"
-                                        value={settings.phone}
-                                        onChange={(e) => setSettings({ ...settings, phone: e.target.value })}
-                                    />
-                                </div>
-                            </div>
-                            <div className="input-group mb-md">
-                                <label className="input-label">Address</label>
+            <div className="settings-container">
+                {/* LEFT COLUMN: Settings Forms */}
+                <div className="settings-main">
+                    <div className="card mb-md">
+                        <h2 className="text-lg font-bold mb-md">Store Information</h2>
+                        <div style={{ display: 'flex', gap: '15px' }}>
+                            <div className="input-group mb-md" style={{ flex: '0 0 65%' }}>
+                                <label className="input-label">Store Name</label>
                                 <input
                                     type="text"
                                     className="input"
-                                    value={settings.address}
-                                    onChange={(e) => setSettings({ ...settings, address: e.target.value })}
+                                    value={settings.storeName}
+                                    onChange={(e) => setSettings({ ...settings, storeName: e.target.value })}
                                 />
                             </div>
+                            <div className="input-group mb-md" style={{ flex: '1' }}>
+                                <label className="input-label">Phone</label>
+                                <input
+                                    type="text"
+                                    className="input"
+                                    value={settings.phone}
+                                    onChange={(e) => setSettings({ ...settings, phone: e.target.value })}
+                                />
+                            </div>
+                        </div>
+                        <div className="input-group mb-md">
+                            <label className="input-label">Address</label>
+                            <input
+                                type="text"
+                                className="input"
+                                value={settings.address}
+                                onChange={(e) => setSettings({ ...settings, address: e.target.value })}
+                            />
+                        </div>
 
-                            <hr style={{ margin: '20px 0', borderColor: 'rgba(255,255,255,0.1)' }} />
+                        <hr style={{ margin: '20px 0', borderColor: 'rgba(255,255,255,0.1)' }} />
 
-                            <div className="mb-md">
-                                <label className="input-label mb-sm">Edit Labels (Names on Receipt)</label>
-                                <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '10px' }}>
-                                    {Object.entries(settings.receiptConfig?.labels || {})
-                                        .filter(([key]) => key !== 'footerBranding')
-                                        .map(([key, value]) => (
-                                            <div key={key} className="input-group">
-                                                <label style={{ fontSize: '0.7rem', opacity: 0.7, textTransform: 'capitalize' }}>{key.replace(/([A-Z])/g, ' $1')}</label>
-                                                <input
-                                                    type="text"
-                                                    className="input input-sm"
-                                                    value={value}
-                                                    style={{ padding: '5px 8px', fontSize: '0.85rem' }}
-                                                    onChange={(e) => {
+                        <div className="mb-md">
+                            <label className="input-label mb-sm">Edit Labels (Names on Receipt)</label>
+                            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '10px' }}>
+                                {Object.entries(settings.receiptConfig?.labels || {})
+                                    .filter(([key]) => key !== 'footerBranding')
+                                    .map(([key, value]) => (
+                                        <div key={key} className="input-group">
+                                            <label style={{ fontSize: '0.7rem', opacity: 0.7, textTransform: 'capitalize' }}>{key.replace(/([A-Z])/g, ' $1')}</label>
+                                            <input
+                                                type="text"
+                                                className="input input-sm"
+                                                value={value}
+                                                style={{ padding: '5px 8px', fontSize: '0.85rem' }}
+                                                onChange={(e) => {
+                                                    const newConfig = { ...settings.receiptConfig };
+                                                    newConfig.labels[key] = e.target.value;
+                                                    setSettings({ ...settings, receiptConfig: newConfig });
+                                                }}
+                                            />
+                                        </div>
+                                    ))}
+
+                                <div className="input-group">
+                                    <label style={{ fontSize: '0.7rem', opacity: 0.7 }}>Receipt Footer Message</label>
+                                    <input
+                                        type="text"
+                                        className="input input-sm"
+                                        value={settings.footerText}
+                                        style={{ padding: '5px 8px', fontSize: '0.85rem' }}
+                                        onChange={(e) => setSettings({ ...settings, footerText: e.target.value })}
+                                    />
+                                </div>
+
+                                <div className="input-group">
+                                    <label style={{ fontSize: '0.7rem', opacity: 0.7, textTransform: 'capitalize' }}>Footer Branding</label>
+                                    <input
+                                        type="text"
+                                        className="input input-sm"
+                                        value={settings.receiptConfig?.labels?.footerBranding || ''}
+                                        style={{ padding: '5px 8px', fontSize: '0.85rem' }}
+                                        onChange={(e) => {
+                                            const newConfig = { ...settings.receiptConfig };
+                                            newConfig.labels.footerBranding = e.target.value;
+                                            setSettings({ ...settings, receiptConfig: newConfig });
+                                        }}
+                                    />
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+
+                    <div className="card mb-md">
+                        <h2 className="text-lg font-bold mb-md">Receipt Customization</h2>
+
+
+
+
+
+                        <hr style={{ margin: '20px 0', borderColor: 'rgba(255,255,255,0.1)' }} />
+
+                        <div className="mb-md">
+                            <label className="input-label mb-sm">Section Order & Toggles</label>
+                            <div className="section-list">
+                                {(settings.receiptConfig?.order || ['shopInfo', 'customerName', 'dateTime', 'billNumber', 'totalItemsCount', 'itemsTable', 'totals', 'footer']).map((key, index, arr) => {
+                                    const section = settings.receiptConfig?.sections?.[key] || { enabled: true, title: key };
+                                    return (
+                                        <div key={key} className="section-item" style={{
+                                            display: 'flex',
+                                            alignItems: 'center',
+                                            justifyContent: 'space-between',
+                                            background: 'rgba(255,255,255,0.05)',
+                                            padding: '10px',
+                                            borderRadius: '8px',
+                                            marginBottom: '8px'
+                                        }}>
+                                            <span style={{ fontSize: '0.9rem', textTransform: 'capitalize' }}>
+                                                {section.title || key.replace(/([A-Z])/g, ' $1')}
+                                            </span>
+                                            <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+                                                <div className={`toggle ${section.enabled ? 'active' : ''}`}
+                                                    onClick={() => {
                                                         const newConfig = { ...settings.receiptConfig };
-                                                        newConfig.labels[key] = e.target.value;
+                                                        if (!newConfig.sections) newConfig.sections = {};
+                                                        if (!newConfig.sections[key]) newConfig.sections[key] = { enabled: true, title: key };
+                                                        newConfig.sections[key].enabled = !section.enabled;
                                                         setSettings({ ...settings, receiptConfig: newConfig });
                                                     }}
                                                 />
-                                            </div>
-                                        ))}
-
-                                    <div className="input-group">
-                                        <label style={{ fontSize: '0.7rem', opacity: 0.7 }}>Receipt Footer Message</label>
-                                        <input
-                                            type="text"
-                                            className="input input-sm"
-                                            value={settings.footerText}
-                                            style={{ padding: '5px 8px', fontSize: '0.85rem' }}
-                                            onChange={(e) => setSettings({ ...settings, footerText: e.target.value })}
-                                        />
-                                    </div>
-
-                                    <div className="input-group">
-                                        <label style={{ fontSize: '0.7rem', opacity: 0.7, textTransform: 'capitalize' }}>Footer Branding</label>
-                                        <input
-                                            type="text"
-                                            className="input input-sm"
-                                            value={settings.receiptConfig?.labels?.footerBranding || ''}
-                                            style={{ padding: '5px 8px', fontSize: '0.85rem' }}
-                                            onChange={(e) => {
-                                                const newConfig = { ...settings.receiptConfig };
-                                                newConfig.labels.footerBranding = e.target.value;
-                                                setSettings({ ...settings, receiptConfig: newConfig });
-                                            }}
-                                        />
-                                    </div>
-                                </div>
-                            </div>
-
-                        </div>
-
-                        <div className="card mb-md">
-                            <h2 className="text-lg font-bold mb-md">Receipt Customization</h2>
-
-
-
-
-
-                            <hr style={{ margin: '20px 0', borderColor: 'rgba(255,255,255,0.1)' }} />
-
-                            <div className="mb-md">
-                                <label className="input-label mb-sm">Section Order & Toggles</label>
-                                <div className="section-list">
-                                    {(settings.receiptConfig?.order || ['shopInfo', 'customerName', 'dateTime', 'billNumber', 'totalItemsCount', 'itemsTable', 'totals', 'footer']).map((key, index, arr) => {
-                                        const section = settings.receiptConfig?.sections?.[key] || { enabled: true, title: key };
-                                        return (
-                                            <div key={key} className="section-item" style={{
-                                                display: 'flex',
-                                                alignItems: 'center',
-                                                justifyContent: 'space-between',
-                                                background: 'rgba(255,255,255,0.05)',
-                                                padding: '10px',
-                                                borderRadius: '8px',
-                                                marginBottom: '8px'
-                                            }}>
-                                                <span style={{ fontSize: '0.9rem', textTransform: 'capitalize' }}>
-                                                    {section.title || key.replace(/([A-Z])/g, ' $1')}
-                                                </span>
-                                                <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
-                                                    <div className={`toggle ${section.enabled ? 'active' : ''}`}
+                                                <div style={{ display: 'flex', gap: '5px' }}>
+                                                    <button
+                                                        disabled={index === 0}
                                                         onClick={() => {
-                                                            const newConfig = { ...settings.receiptConfig };
-                                                            if (!newConfig.sections) newConfig.sections = {};
-                                                            if (!newConfig.sections[key]) newConfig.sections[key] = { enabled: true, title: key };
-                                                            newConfig.sections[key].enabled = !section.enabled;
-                                                            setSettings({ ...settings, receiptConfig: newConfig });
+                                                            const newOrder = [...arr];
+                                                            [newOrder[index - 1], newOrder[index]] = [newOrder[index], newOrder[index - 1]];
+                                                            setSettings({ ...settings, receiptConfig: { ...settings.receiptConfig, order: newOrder } });
                                                         }}
-                                                    />
-                                                    <div style={{ display: 'flex', gap: '5px' }}>
-                                                        <button
-                                                            disabled={index === 0}
-                                                            onClick={() => {
-                                                                const newOrder = [...arr];
-                                                                [newOrder[index - 1], newOrder[index]] = [newOrder[index], newOrder[index - 1]];
-                                                                setSettings({ ...settings, receiptConfig: { ...settings.receiptConfig, order: newOrder } });
-                                                            }}
-                                                            className="btn btn-sm"
-                                                            style={{ padding: '2px 8px' }}
-                                                        >↑</button>
-                                                        <button
-                                                            disabled={index === arr.length - 1}
-                                                            onClick={() => {
-                                                                const newOrder = [...arr];
-                                                                [newOrder[index + 1], newOrder[index]] = [newOrder[index], newOrder[index + 1]];
-                                                                setSettings({ ...settings, receiptConfig: { ...settings.receiptConfig, order: newOrder } });
-                                                            }}
-                                                            className="btn btn-sm"
-                                                            style={{ padding: '2px 8px' }}
-                                                        >↓</button>
-                                                    </div>
+                                                        className="btn btn-sm"
+                                                        style={{ padding: '2px 8px' }}
+                                                    >↑</button>
+                                                    <button
+                                                        disabled={index === arr.length - 1}
+                                                        onClick={() => {
+                                                            const newOrder = [...arr];
+                                                            [newOrder[index + 1], newOrder[index]] = [newOrder[index], newOrder[index + 1]];
+                                                            setSettings({ ...settings, receiptConfig: { ...settings.receiptConfig, order: newOrder } });
+                                                        }}
+                                                        className="btn btn-sm"
+                                                        style={{ padding: '2px 8px' }}
+                                                    >↓</button>
                                                 </div>
                                             </div>
-                                        );
-                                    })}
-                                </div>
+                                        </div>
+                                    );
+                                })}
                             </div>
-
-
-
-
                         </div>
 
-                        <div className="card mb-md" style={{ borderColor: 'var(--color-primary)', borderWidth: '1px' }}>
-                            <h2 className="text-lg font-bold mb-md" style={{ color: 'var(--color-primary)' }}>Data Management</h2>
-                            <p className="text-secondary mb-md">
-                                Quickly populate your store with common grocery categories and items.
-                                This will not delete your existing data.
-                            </p>
-                            <button
-                                className="btn btn-secondary w-full"
-                                onClick={handlePopulateData}
-                                disabled={populating}
-                            >
-                                {populating ? 'Populating...' : '📂 Load Default Items & Categories'}
-                            </button>
-                        </div>
 
-                        {/* Save button moved to right column */}
+
+
                     </div>
 
-                    {/* RIGHT COLUMN: Sticky Preview */}
-                    <div className="settings-sidebar">
-                        <div style={{
-                            display: 'flex',
-                            flexDirection: 'column',
-                            alignItems: 'center',
-                            gap: '12px',
-                            padding: '12px',
-                            background: 'rgba(255,255,255,0.03)',
-                            borderRadius: '16px',
-                            border: '1px solid rgba(255,255,255,0.08)',
-                            backdropFilter: 'blur(10px)',
-                            boxShadow: '0 8px 32px 0 rgba(0, 0, 0, 0.2)'
-                        }}>
-                            <div style={{ width: '100%', marginBottom: '12px', display: 'flex', flexDirection: 'column', gap: '8px' }}>
-                                <div style={{ display: 'flex', flexDirection: 'column', gap: '4px' }}>
-                                    <span style={{ fontSize: '0.8rem', color: 'var(--color-text-secondary)' }}>Receipt Width</span>
-                                    <select
-                                        className="input input-sm"
-                                        style={{ width: '100%', padding: '6px', fontSize: '0.85rem' }}
-                                        value={settings.printWidth}
-                                        onChange={(e) => setSettings({ ...settings, printWidth: e.target.value })}
-                                    >
-                                        <option value="58mm">58mm (Standard)</option>
-                                        <option value="80mm">80mm (Wide)</option>
-                                    </select>
-                                </div>
-                                <div style={{ display: 'flex', flexDirection: 'column', gap: '4px' }}>
-                                    <span style={{ fontSize: '0.8rem', color: 'var(--color-text-secondary)' }}>Item Row Layout</span>
-                                    <select
-                                        className="input input-sm"
-                                        style={{ width: '100%', padding: '6px', fontSize: '0.85rem' }}
-                                        value={settings.receiptConfig?.itemLayout || 'standard'}
-                                        onChange={(e) => {
-                                            const newConfig = { ...settings.receiptConfig, itemLayout: e.target.value };
-                                            setSettings({ ...settings, receiptConfig: newConfig });
-                                        }}
-                                    >
-                                        <option value="standard">Standard (Compact)</option>
-                                        <option value="table">Table (Name | Qty | Total)</option>
-                                    </select>
-                                </div>
+                    <div className="card mb-md" style={{ borderColor: 'var(--color-primary)', borderWidth: '1px' }}>
+                        <h2 className="text-lg font-bold mb-md" style={{ color: 'var(--color-primary)' }}>Data Management</h2>
+                        <p className="text-secondary mb-md">
+                            Quickly populate your store with common grocery categories and items.
+                            This will not delete your existing data.
+                        </p>
+                        <button
+                            className="btn btn-secondary w-full"
+                            onClick={handlePopulateData}
+                            disabled={populating}
+                        >
+                            {populating ? 'Populating...' : '📂 Load Default Items & Categories'}
+                        </button>
+                    </div>
+
+                    {/* Save button moved to right column */}
+                </div>
+
+                {/* RIGHT COLUMN: Sticky Preview */}
+                <div className="settings-sidebar">
+                    <div style={{
+                        display: 'flex',
+                        flexDirection: 'column',
+                        alignItems: 'center',
+                        gap: '12px',
+                        padding: '12px',
+                        background: 'rgba(255,255,255,0.03)',
+                        borderRadius: '16px',
+                        border: '1px solid rgba(255,255,255,0.08)',
+                        backdropFilter: 'blur(10px)',
+                        boxShadow: '0 8px 32px 0 rgba(0, 0, 0, 0.2)'
+                    }}>
+                        <div style={{ width: '100%', marginBottom: '12px', display: 'flex', flexDirection: 'column', gap: '8px' }}>
+                            <div style={{ display: 'flex', flexDirection: 'column', gap: '4px' }}>
+                                <span style={{ fontSize: '0.8rem', color: 'var(--color-text-secondary)' }}>Receipt Width</span>
+                                <select
+                                    className="input input-sm"
+                                    style={{ width: '100%', padding: '6px', fontSize: '0.85rem' }}
+                                    value={settings.printWidth}
+                                    onChange={(e) => setSettings({ ...settings, printWidth: e.target.value })}
+                                >
+                                    <option value="58mm">58mm (Standard)</option>
+                                    <option value="80mm">80mm (Wide)</option>
+                                </select>
                             </div>
-
-                            <h4 className="text-sm font-bold text-secondary uppercase tracking-wider mb-xs">Live Preview</h4>
-
-                            <div style={{ position: 'relative' }}>
-                                <pre className={`receipt-preview receipt-preview-${settings.printWidth}`}>
-                                    {previewReceipt()}
-                                </pre>
-                                {/* Paper Tear Effect Bottom */}
-                                <div style={{
-                                    position: 'absolute',
-                                    bottom: '-4px',
-                                    left: '0',
-                                    right: '0',
-                                    height: '4px',
-                                    background: `radial-gradient(circle, transparent 70%, white 75%)`,
-                                    backgroundSize: '8px 4px',
-                                }}></div>
+                            <div style={{ display: 'flex', flexDirection: 'column', gap: '4px' }}>
+                                <span style={{ fontSize: '0.8rem', color: 'var(--color-text-secondary)' }}>Item Row Layout</span>
+                                <select
+                                    className="input input-sm"
+                                    style={{ width: '100%', padding: '6px', fontSize: '0.85rem' }}
+                                    value={settings.receiptConfig?.itemLayout || 'standard'}
+                                    onChange={(e) => {
+                                        const newConfig = { ...settings.receiptConfig, itemLayout: e.target.value };
+                                        setSettings({ ...settings, receiptConfig: newConfig });
+                                    }}
+                                >
+                                    <option value="standard">Standard (Compact)</option>
+                                    <option value="table">Table (Name | Qty | Total)</option>
+                                </select>
                             </div>
-
-                            <button
-                                className="btn btn-primary btn-test-print"
-                                onClick={handleTestPrint}
-                            >
-                                <span>🖨️</span> Test Print
-                            </button>
                         </div>
 
-                        <div className="danger-zone-card">
-                            <h4 style={{
-                                fontSize: '0.75rem',
-                                fontWeight: 'bold',
-                                textTransform: 'uppercase',
-                                letterSpacing: '0.05em',
-                                color: '#ff4444',
-                                marginBottom: '4px',
-                                textAlign: 'center'
-                            }}>Danger Zone</h4>
+                        <h4 className="text-sm font-bold text-secondary uppercase tracking-wider mb-xs">Live Preview</h4>
 
-                            <button
-                                className="btn btn-danger-zone"
-                                onClick={() => handleClearData('items')}
-                            >
-                                <span style={{ marginRight: '8px', fontSize: '1.1em' }}>📦</span> Clear Items
-                            </button>
-
-                            <button
-                                className="btn btn-danger-zone"
-                                onClick={() => handleClearData('drafts')}
-                            >
-                                <span style={{ marginRight: '8px', fontSize: '1.1em' }}>📝</span> Clear Drafts
-                            </button>
-
-                            <button
-                                className="btn btn-danger-zone"
-                                onClick={() => handleClearData('bills')}
-                            >
-                                <span style={{ marginRight: '8px', fontSize: '1.1em' }}>📜</span> Clear Records
-                            </button>
-
-                            <button
-                                className="btn btn-danger-zone"
-                                onClick={() => handleClearData('categories')}
-                            >
-                                <span style={{ marginRight: '8px', fontSize: '1.1em' }}>📂</span> Clear Categories
-                            </button>
+                        <div style={{ position: 'relative' }}>
+                            <pre className={`receipt-preview receipt-preview-${settings.printWidth}`}>
+                                {previewReceipt()}
+                            </pre>
+                            {/* Paper Tear Effect Bottom */}
+                            <div style={{
+                                position: 'absolute',
+                                bottom: '-4px',
+                                left: '0',
+                                right: '0',
+                                height: '4px',
+                                background: `radial-gradient(circle, transparent 70%, white 75%)`,
+                                backgroundSize: '8px 4px',
+                            }}></div>
                         </div>
 
                         <button
-                            className="btn btn-primary btn-save-settings"
-                            onClick={handleSaveButton}
+                            className="btn btn-primary btn-test-print"
+                            onClick={handleTestPrint}
                         >
-                            {saved ? 'Saved!' : 'Save Settings'}
+                            <span>🖨️</span> Test Print
                         </button>
                     </div>
+
+                    <div className="danger-zone-card">
+                        <h4 style={{
+                            fontSize: '0.75rem',
+                            fontWeight: 'bold',
+                            textTransform: 'uppercase',
+                            letterSpacing: '0.05em',
+                            color: '#ff4444',
+                            marginBottom: '4px',
+                            textAlign: 'center'
+                        }}>Danger Zone</h4>
+
+                        <button
+                            className="btn btn-danger-zone"
+                            onClick={() => handleClearData('items')}
+                        >
+                            <span style={{ marginRight: '8px', fontSize: '1.1em' }}>📦</span> Clear Items
+                        </button>
+
+                        <button
+                            className="btn btn-danger-zone"
+                            onClick={() => handleClearData('drafts')}
+                        >
+                            <span style={{ marginRight: '8px', fontSize: '1.1em' }}>📝</span> Clear Drafts
+                        </button>
+
+                        <button
+                            className="btn btn-danger-zone"
+                            onClick={() => handleClearData('bills')}
+                        >
+                            <span style={{ marginRight: '8px', fontSize: '1.1em' }}>📜</span> Clear Records
+                        </button>
+
+                        <button
+                            className="btn btn-danger-zone"
+                            onClick={() => handleClearData('categories')}
+                        >
+                            <span style={{ marginRight: '8px', fontSize: '1.1em' }}>📂</span> Clear Categories
+                        </button>
+                    </div>
+
+                    <button
+                        className="btn btn-primary btn-save-settings"
+                        onClick={handleSaveButton}
+                    >
+                        {saved ? 'Saved!' : 'Save Settings'}
+                    </button>
                 </div>
             </div>
-            );
+        </div>
+    );
 }
