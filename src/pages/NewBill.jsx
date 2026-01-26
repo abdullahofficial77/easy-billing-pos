@@ -471,7 +471,7 @@ export default function NewBill() {
             </Modal>
 
             {/* Header with Draft/Save buttons */}
-            <div className="page-header" style={{
+            <div className="page-header sticky-header" style={{
                 display: 'flex',
                 justifyContent: 'space-between',
                 alignItems: 'center',

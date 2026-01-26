@@ -143,7 +143,7 @@ export default function AllItems() {
 
     return (
         <div>
-            <div className="page-header flex justify-between items-center">
+            <div className="page-header sticky-header flex justify-between items-center">
                 <div>
                     <h1 className="page-title">All Items</h1>
                     <p className="page-subtitle">{items.length} items</p>
