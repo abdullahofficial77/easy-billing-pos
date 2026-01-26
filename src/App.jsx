@@ -28,8 +28,9 @@ export default function App() {
         const initCapacitor = async () => {
             try {
                 // Status Bar
+                await StatusBar.setOverlaysWebView({ overlay: true });
                 await StatusBar.setStyle({ style: Style.Dark });
-                await StatusBar.setBackgroundColor({ color: '#0f0f1a' });
+                await StatusBar.setBackgroundColor({ color: 'transparent' });
             } catch (e) {
                 // Ignore in web browser
             }
