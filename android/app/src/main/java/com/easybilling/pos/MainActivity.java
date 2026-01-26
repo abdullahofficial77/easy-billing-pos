@@ -1,4 +1,4 @@
-package com.getcapacitor.myapp;
+package com.easybilling.pos;
 
 import com.getcapacitor.BridgeActivity;
 
