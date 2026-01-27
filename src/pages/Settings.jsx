@@ -249,7 +249,9 @@ export default function Settings() {
     return (
         <div>
             <div className="sticky-header page-header">
-                <h1 className="page-title">Settings</h1>
+                <div className="text-center">
+                    <h1 className="page-title">Settings</h1>
+                </div>
             </div>
 
             <div className="settings-container">

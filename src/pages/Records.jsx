@@ -75,8 +75,10 @@ export default function Records() {
     return (
         <div>
             <div className="page-header sticky-header">
-                <h1 className="page-title">Records</h1>
-                <p className="page-subtitle">{bills.length} bills</p>
+                <div className="text-center">
+                    <h1 className="page-title">Records</h1>
+                    <p className="page-subtitle">{bills.length} bills</p>
+                </div>
             </div>
 
 

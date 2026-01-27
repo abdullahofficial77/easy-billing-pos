@@ -44,8 +44,10 @@ export default function Drafts() {
     return (
         <div>
             <div className="page-header sticky-header">
-                <h1 className="page-title">Drafts</h1>
-                <p className="page-subtitle">{drafts.length} saved drafts</p>
+                <div className="text-center">
+                    <h1 className="page-title">Drafts</h1>
+                    <p className="page-subtitle">{drafts.length} saved drafts</p>
+                </div>
             </div>
 
             {paginatedDrafts.length === 0 ? (

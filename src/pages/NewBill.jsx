@@ -472,18 +472,22 @@ export default function NewBill() {
 
             {/* Header with Draft/Save buttons */}
             <div className="page-header sticky-header" style={{
-                display: 'flex',
-                justifyContent: 'space-between',
-                alignItems: 'center',
-                marginBottom: '12px',
-                gap: '12px'
+                position: 'sticky',
+                justifyContent: 'center',
+                minHeight: '60px',
+                padding: '0 var(--spacing-md)'
             }}>
-                <div style={{ flex: 1 }}>
-                    <h1 className="page-title" style={{ fontSize: '1.25rem', margin: 0 }}>New Bill</h1>
-
+                <div style={{ position: 'absolute', left: 'var(--spacing-md)' }}>
+                    <button className="btn btn-danger btn-sm" onClick={handleCancelBill} style={{ padding: '6px 10px' }}>
+                        Cancel
+                    </button>
                 </div>
-                <div style={{ display: 'flex', gap: '6px', flexShrink: 0 }}>
-                    <button className="btn btn-danger btn-sm" onClick={handleCancelBill}>Cancel</button>
+
+                <div className="text-center">
+                    <h1 className="page-title" style={{ fontSize: '1.25rem', margin: 0 }}>New Bill</h1>
+                </div>
+
+                <div style={{ position: 'absolute', right: 'var(--spacing-md)', display: 'flex', gap: '6px' }}>
                     <button
                         className="btn btn-secondary btn-sm"
                         onClick={handleSaveDraft}
@@ -511,7 +515,8 @@ export default function NewBill() {
                 borderRadius: 'var(--radius-md)',
                 marginBottom: '12px',
                 fontSize: '0.85rem'
-            }}>
+            }
+            }>
                 <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
                     <span className="text-muted">Total</span>
                     <span className="font-bold text-success">{formatCurrency(totalAmount)}</span>
@@ -559,10 +564,10 @@ export default function NewBill() {
                         }}
                     />
                 </div>
-            </div>
+            </div >
 
             {/* Customer Info - Compact Row */}
-            <div style={{ display: 'flex', gap: '8px', marginBottom: '10px' }}>
+            < div style={{ display: 'flex', gap: '8px', marginBottom: '10px' }}>
                 <input
                     type="text"
                     className="input"
@@ -579,7 +584,7 @@ export default function NewBill() {
                     onChange={(e) => setCustomerPhone(e.target.value)}
                     style={{ width: '35%', padding: '6px 10px', fontSize: '0.85rem' }}
                 />
-            </div>
+            </div >
 
             {/* Favorites */}
             {
