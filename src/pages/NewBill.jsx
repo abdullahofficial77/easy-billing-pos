@@ -281,11 +281,13 @@ export default function NewBill() {
         return (
             <div className="new-bill-page" style={{
                 padding: '16px',
-                paddingTop: 'calc(16px + env(safe-area-inset-top))', // Safe area fix
-                height: 'calc(100vh - 60px)', // Adjust based on your nav bar height if needed
+                /* Ensure strictly safe top padding (Status Bar is usually 24px-48px) */
+                /* Parent has 16px padding, so we add more to clear the ~40px status bar area */
+                paddingTop: '32px',
+                height: '100%',
                 display: 'flex',
                 flexDirection: 'column',
-                overflow: 'hidden' // Prevent outer scroll 
+                overflow: 'hidden' // Prevent outer scroll
             }}>
                 {/* Pending Payments Section - Now on Top */}
                 {pendingPayments.length > 0 && (
