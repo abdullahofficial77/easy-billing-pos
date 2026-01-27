@@ -380,7 +380,7 @@ export default function Settings() {
                                                         setSettings({ ...settings, receiptConfig: newConfig });
                                                     }}
                                                 />
-                                                <div style={{ display: 'flex', gap: '8px' }}>
+                                                <div style={{ display: 'flex', gap: '8px', alignItems: 'center' }}>
                                                     <button
                                                         disabled={index === 0}
                                                         onClick={() => {
@@ -390,7 +390,12 @@ export default function Settings() {
                                                         }}
                                                         className="btn btn-move"
                                                         aria-label="Move up"
-                                                    >↑</button>
+                                                    >
+                                                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                                                            <line x1="12" y1="19" x2="12" y2="5"></line>
+                                                            <polyline points="5 12 12 5 19 12"></polyline>
+                                                        </svg>
+                                                    </button>
                                                     <button
                                                         disabled={index === arr.length - 1}
                                                         onClick={() => {
@@ -400,7 +405,12 @@ export default function Settings() {
                                                         }}
                                                         className="btn btn-move"
                                                         aria-label="Move down"
-                                                    >↓</button>
+                                                    >
+                                                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                                                            <line x1="12" y1="5" x2="12" y2="19"></line>
+                                                            <polyline points="19 12 12 19 5 12"></polyline>
+                                                        </svg>
+                                                    </button>
                                                 </div>
                                             </div>
                                         </div>
