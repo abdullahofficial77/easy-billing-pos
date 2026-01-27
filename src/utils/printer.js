@@ -181,59 +181,74 @@ export const generateReceiptText = (bill, settings, width = '58mm', itemLayout =
 };
 
 export const printReceipt = (content) => {
-    // Create a hidden iframe
-    const iframe = document.createElement('iframe');
-    iframe.style.position = 'fixed';
-    iframe.style.right = '0';
-    iframe.style.bottom = '0';
-    iframe.style.width = '0';
-    iframe.style.height = '0';
-    iframe.style.border = '0';
-    document.body.appendChild(iframe);
+    return new Promise((resolve) => {
+        // Create a hidden iframe
+        let iframe = document.createElement('iframe');
+        iframe.style.position = 'fixed';
+        iframe.style.right = '0';
+        iframe.style.bottom = '0';
+        iframe.style.width = '0';
+        iframe.style.height = '0';
+        iframe.style.border = '0';
+        document.body.appendChild(iframe);
 
-    // Write content to iframe
-    const doc = iframe.contentWindow.document;
-    doc.open();
-    doc.write(`
-        <!DOCTYPE html>
-        <html>
-        <head>
-            <title>Receipt</title>
-            <style>
-                @page { margin: 0; size: auto; }
-                body {
-                    font-family: 'Courier New', Courier, monospace;
-                    font-size: 12px;
-                    line-height: 1.2;
-                    padding: 0;
-                    margin: 5px;
-                    white-space: pre;
-                    direction: ltr;
-                    width: 100%;
-                    color: black;
-                }
-                @media print {
-                    body { padding: 0; margin: 0; }
-                    html, body { height: auto; }
-                }
-            </style>
-        </head>
-        <body>${content}</body>
-        </html>
-    `);
-    doc.close();
+        // Write content to iframe
+        const doc = iframe.contentWindow.document;
+        doc.open();
+        doc.write(`
+            <!DOCTYPE html>
+            <html>
+            <head>
+                <title>Receipt</title>
+                <style>
+                    @page { margin: 0; size: auto; }
+                    body {
+                        font-family: 'Courier New', Courier, monospace;
+                        font-size: 12px;
+                        line-height: 1.2;
+                        padding: 0;
+                        margin: 5px;
+                        white-space: pre;
+                        direction: ltr;
+                        width: 100%;
+                        color: black;
+                    }
+                    @media print {
+                        body { padding: 0; margin: 0; }
+                        html, body { height: auto; }
+                    }
+                </style>
+            </head>
+            <body>${content}</body>
+            </html>
+        `);
+        doc.close();
 
-    // Print and cleanup
-    iframe.contentWindow.focus();
-    setTimeout(() => {
-        try {
-            iframe.contentWindow.print();
-        } catch (e) {
-            console.error('Printing failed', e);
+        // Print and cleanup
+        // Wait for content to load properly
+        iframe.onload = () => {
+            iframe.contentWindow.focus();
+            setTimeout(() => {
+                try {
+                    iframe.contentWindow.print();
+                } catch (e) {
+                    console.error('Printing failed', e);
+                } finally {
+                    resolve();
+                    // Remove iframe after a longer delay to ensure print dialog is done
+                    // Removing it too early causes the freeze/crash on Android WebView
+                    setTimeout(() => {
+                        if (document.body.contains(iframe)) {
+                            document.body.removeChild(iframe);
+                        }
+                    }, 5000); // Increased to 5 seconds
+                }
+            }, 500);
+        };
+
+        // Fallback if onload doesn't fire immediately (e.g. strict CSP or race condition)
+        if (iframe.contentDocument.readyState === 'complete') {
+            iframe.onload();
         }
-        // Remove iframe after sufficient time (1s to allow print dialog to engage)
-        setTimeout(() => {
-            document.body.removeChild(iframe);
-        }, 1000);
-    }, 500);
+    });
 };
