@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
+import { ThemeProvider } from './components/ThemeProvider';
 import PinLock from './components/Auth/PinLock';
 import AppShell from './components/Layout/AppShell';
 import NewBill from './pages/NewBill';
@@ -64,17 +65,19 @@ export default function App() {
     }
 
     return (
-        <BrowserRouter>
-            <AppShell>
-                <Routes>
-                    <Route path="/" element={<NewBill />} />
-                    <Route path="/drafts" element={<Drafts />} />
-                    <Route path="/records" element={<Records />} />
-                    <Route path="/items" element={<AllItems />} />
-                    <Route path="/categories" element={<Categories />} />
-                    <Route path="/settings" element={<Settings />} />
-                </Routes>
-            </AppShell>
-        </BrowserRouter>
+        <ThemeProvider>
+            <BrowserRouter>
+                <AppShell>
+                    <Routes>
+                        <Route path="/" element={<NewBill />} />
+                        <Route path="/drafts" element={<Drafts />} />
+                        <Route path="/records" element={<Records />} />
+                        <Route path="/items" element={<AllItems />} />
+                        <Route path="/categories" element={<Categories />} />
+                        <Route path="/settings" element={<Settings />} />
+                    </Routes>
+                </AppShell>
+            </BrowserRouter>
+        </ThemeProvider>
     );
 }

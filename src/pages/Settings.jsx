@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 import { getAllSettings, saveSettings, addCategory, addItem, getAllCategories, getAllItems, clearAllItems, clearAllCategories, clearAllBills, clearAllDrafts } from '../db/database';
 import { generateReceiptText } from '../utils/printer';
 import { INITIAL_DATA } from '../utils/initialData';
+import { useTheme } from '../components/ThemeProvider';
 
 export default function Settings() {
     const [settings, setSettings] = useState({
@@ -41,6 +42,7 @@ export default function Settings() {
     });
     const [saved, setSaved] = useState(false);
     const [populating, setPopulating] = useState(false);
+    const { theme, toggle: toggleTheme } = useTheme();
 
     useEffect(() => {
         loadSettings();
@@ -257,6 +259,34 @@ export default function Settings() {
             <div className="settings-container">
                 {/* LEFT COLUMN: Settings Forms */}
                 <div className="settings-main">
+                    {/* Theme Toggle Card */}
+                    <div className="card mb-md" style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '16px 20px' }}>
+                        <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
+                            <span style={{ fontSize: '1.5rem' }}>{theme === 'dark' ? '🌙' : '☀️'}</span>
+                            <div>
+                                <h3 style={{ margin: 0, fontSize: '1rem', fontWeight: 600 }}>Appearance</h3>
+                                <span className="text-muted" style={{ fontSize: '0.85rem' }}>{theme === 'dark' ? 'Dark Mode' : 'Light Mode'}</span>
+                            </div>
+                        </div>
+                        <button
+                            onClick={toggleTheme}
+                            className="btn ripple"
+                            style={{
+                                minWidth: '80px',
+                                padding: '10px 16px',
+                                background: theme === 'dark' ? 'var(--color-bg-elevated)' : 'var(--color-accent)',
+                                color: theme === 'dark' ? 'var(--color-text-primary)' : '#fff',
+                                border: 'none',
+                                borderRadius: 'var(--radius-md)',
+                                fontSize: '0.9rem',
+                                fontWeight: 500,
+                                cursor: 'pointer'
+                            }}
+                        >
+                            {theme === 'dark' ? '☀️ Light' : '🌙 Dark'}
+                        </button>
+                    </div>
+
                     <div className="card mb-md">
                         <h2 className="text-lg font-bold mb-md">Store Information</h2>
                         <div style={{ display: 'flex', gap: '15px' }}>

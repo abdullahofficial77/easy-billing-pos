@@ -143,12 +143,21 @@ export default function AllItems() {
 
     return (
         <div>
-            <div className="page-header sticky-header flex justify-between items-center">
+            <div className="page-header sticky-header" style={{
+                position: 'sticky',
+                display: 'flex',
+                justifyContent: 'space-between',
+                alignItems: 'center'
+            }}>
                 <div>
                     <h1 className="page-title">All Items</h1>
                     <p className="page-subtitle">{items.length} items</p>
                 </div>
-                <button className="btn btn-primary" onClick={openAddModal}>
+                <button
+                    className="btn btn-primary"
+                    onClick={openAddModal}
+                    style={{ position: 'absolute', right: 'var(--spacing-md)' }}
+                >
                     + Add Item
                 </button>
             </div>

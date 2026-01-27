@@ -44,7 +44,7 @@ export default function Drafts() {
     return (
         <div>
             <div className="page-header sticky-header">
-                <div className="text-center">
+                <div>
                     <h1 className="page-title">Drafts</h1>
                     <p className="page-subtitle">{drafts.length} saved drafts</p>
                 </div>

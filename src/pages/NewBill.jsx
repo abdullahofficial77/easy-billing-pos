@@ -284,7 +284,10 @@ export default function NewBill() {
                 /* Ensure strictly safe top padding (Status Bar is usually 24px-48px) */
                 /* Parent has 16px padding, so we add more to clear the ~40px status bar area */
                 paddingTop: '32px',
-                height: '100%',
+                /* Ensure bottom safe area for fixed footer */
+                /* Reduced extra padding to bring buttons closer to nav */
+                paddingBottom: 0,
+                flex: 1,
                 display: 'flex',
                 flexDirection: 'column',
                 overflow: 'hidden' // Prevent outer scroll
@@ -374,7 +377,7 @@ export default function NewBill() {
                     textAlign: 'center',
                     padding: '10px',
                     marginTop: 'auto', // Push to bottom (redundant with flex:1 above but good backup)
-                    marginBottom: '10px',
+                    marginBottom: '0px', // Reduced to 0
                     flexShrink: 0 // Don't shrink buttons
                 }}>
                     <div className="action-buttons-group">
@@ -948,10 +951,65 @@ export default function NewBill() {
                 }
             >
                 {confirmModal.action === 'saved' ? (
-                    <div style={{ textAlign: 'center' }}>
-                        <div style={{ fontSize: '3rem', marginBottom: '10px' }}>✅</div>
-                        <p className="text-success font-bold" style={{ fontSize: '1.2rem' }}>Bill Saved Successfully!</p>
-                        <p style={{ marginTop: '8px' }}>Total Amount: {formatCurrency(confirmModal.bill?.totalAmount || 0)}</p>
+                    <div style={{ textAlign: 'left', width: '100%' }}>
+                        <div style={{ textAlign: 'center', marginBottom: '16px' }}>
+                            <div style={{ fontSize: '3rem', marginBottom: '4px' }}>✅</div>
+                            <p className="text-success font-bold" style={{ fontSize: '1.2rem' }}>Bill Saved!</p>
+                        </div>
+
+                        {/* Bill Summary Card */}
+                        <div style={{
+                            background: 'var(--color-bg-secondary)',
+                            borderRadius: 'var(--radius-md)',
+                            padding: '16px',
+                            fontSize: '0.9rem'
+                        }}>
+                            <div style={{ marginBottom: '12px', paddingBottom: '12px', borderBottom: '1px solid var(--color-border)' }}>
+                                <h4 style={{ margin: 0, fontSize: '1rem', color: 'var(--color-text-primary)' }}>{confirmModal.bill?.customerName}</h4>
+                                <div style={{ fontSize: '0.8rem', color: 'var(--color-text-muted)' }}>
+                                    {new Date().toLocaleDateString()} {new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
+                                </div>
+                            </div>
+
+                            <div style={{ marginBottom: '16px', maxHeight: '200px', overflowY: 'auto' }}>
+                                <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '8px', color: 'var(--color-text-muted)', fontSize: '0.75rem', textTransform: 'uppercase', letterSpacing: '0.5px' }}>
+                                    <span>Item Details</span>
+                                    <span>Amount</span>
+                                </div>
+                                {confirmModal.bill?.items?.map((item, index) => {
+                                    const itemPrice = item.overridePrice || item.price;
+                                    const lineTotal = itemPrice * item.quantity;
+                                    return (
+                                        <div key={index} style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '8px' }}>
+                                            <div style={{ flex: 1 }}>
+                                                <div style={{ color: 'var(--color-text-primary)' }}>{item.name}</div>
+                                                <div style={{ fontSize: '0.75rem', color: 'var(--color-text-muted)' }}>
+                                                    {item.quantity} {item.unitType === 'kg' ? 'kg' : item.unitType} × {formatCurrency(itemPrice)}
+                                                </div>
+                                            </div>
+                                            <div style={{ fontWeight: '500' }}>{formatCurrency(lineTotal)}</div>
+                                        </div>
+                                    );
+                                })}
+                            </div>
+
+                            <div style={{ borderTop: '1px dashed var(--color-border)', paddingTop: '12px' }}>
+                                <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '4px' }}>
+                                    <span style={{ color: 'var(--color-text-muted)' }}>Total</span>
+                                    <span style={{ fontWeight: 'bold', fontSize: '1.1rem' }}>{formatCurrency(confirmModal.bill?.totalAmount)}</span>
+                                </div>
+                                <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '4px' }}>
+                                    <span style={{ color: 'var(--color-text-muted)' }}>Paid</span>
+                                    <span>{formatCurrency(confirmModal.bill?.paidAmount)}</span>
+                                </div>
+                                {confirmModal.bill?.remainingAmount > 0 && (
+                                    <div style={{ display: 'flex', justifyContent: 'space-between', marginTop: '8px', paddingTop: '8px', borderTop: '1px solid var(--color-border)', color: 'var(--color-warning)' }}>
+                                        <span style={{ fontWeight: 'bold' }}>Remaining</span>
+                                        <span style={{ fontWeight: 'bold' }}>{formatCurrency(confirmModal.bill?.remainingAmount)}</span>
+                                    </div>
+                                )}
+                            </div>
+                        </div>
                     </div>
                 ) : (
                     <p>{confirmModal.message}</p>
