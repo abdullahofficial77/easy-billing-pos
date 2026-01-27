@@ -185,11 +185,16 @@ export const printReceipt = (content) => {
         // Create a hidden iframe
         let iframe = document.createElement('iframe');
         iframe.style.position = 'fixed';
-        iframe.style.right = '0';
-        iframe.style.bottom = '0';
-        iframe.style.width = '0';
-        iframe.style.height = '0';
+        // Move strictly off-screen
+        iframe.style.top = '-10000px';
+        iframe.style.left = '-10000px';
+        // Keep non-zero size to ensure render engine acknowledges it (required for some browsers to print)
+        iframe.style.width = '1px';
+        iframe.style.height = '1px';
         iframe.style.border = '0';
+        iframe.style.opacity = '0';
+        iframe.style.pointerEvents = 'none';
+        iframe.style.zIndex = '-9999';
         document.body.appendChild(iframe);
 
         // Write content to iframe
