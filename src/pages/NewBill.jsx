@@ -281,6 +281,7 @@ export default function NewBill() {
         return (
             <div className="new-bill-page" style={{
                 padding: '16px',
+                paddingTop: 'calc(16px + env(safe-area-inset-top))', // Safe area fix
                 height: 'calc(100vh - 60px)', // Adjust based on your nav bar height if needed
                 display: 'flex',
                 flexDirection: 'column',
@@ -473,21 +474,20 @@ export default function NewBill() {
             {/* Header with Draft/Save buttons */}
             <div className="page-header sticky-header" style={{
                 position: 'sticky',
-                justifyContent: 'center',
+                display: 'flex',
+                justifyContent: 'space-between',
+                alignItems: 'center',
                 minHeight: '60px',
-                padding: '0 var(--spacing-md)'
+                minHeight: '60px',
             }}>
-                <div style={{ position: 'absolute', left: 'var(--spacing-md)' }}>
-                    <button className="btn btn-danger btn-sm" onClick={handleCancelBill} style={{ padding: '6px 10px' }}>
-                        Cancel
-                    </button>
-                </div>
-
-                <div className="text-center">
+                <div>
                     <h1 className="page-title" style={{ fontSize: '1.25rem', margin: 0 }}>New Bill</h1>
                 </div>
 
-                <div style={{ position: 'absolute', right: 'var(--spacing-md)', display: 'flex', gap: '6px' }}>
+                <div style={{ display: 'flex', gap: '8px' }}>
+                    <button className="btn btn-danger btn-sm" onClick={handleCancelBill} style={{ padding: '6px 10px' }}>
+                        Cancel
+                    </button>
                     <button
                         className="btn btn-secondary btn-sm"
                         onClick={handleSaveDraft}
