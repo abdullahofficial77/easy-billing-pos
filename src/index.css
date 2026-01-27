@@ -1623,15 +1623,16 @@ h4 {
     opacity: 0.3;
     pointer-events: none;
     border-color: transparent;
+}
 
-    /* Keyboard handling - Hide footer when keyboard is open (based on viewport height) */
-    @media (max-height: 400px) {
-        .bottom-nav {
-            display: none !important;
-        }
-
-        .new-bill-page {
-            height: 100vh !important;
-            /* Reclaim footer space */
-        }
+/* Keyboard handling - Hide footer when keyboard is open (based on viewport height) */
+@media (max-height: 400px) {
+    .bottom-nav {
+        display: none !important;
     }
+
+    .new-bill-page {
+        height: 100vh !important;
+        /* Reclaim footer space */
+    }
+}
