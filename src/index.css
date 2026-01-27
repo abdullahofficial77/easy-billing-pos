@@ -589,7 +589,8 @@ h4 {
     z-index: 90;
     background-color: var(--color-bg-primary);
     margin: 0 calc(var(--spacing-md) * -1) var(--spacing-md) calc(var(--spacing-md) * -1);
-    padding-top: calc(var(--spacing-md) + env(safe-area-inset-top));
+    /* Ensure at least 44px top padding to clear Status Bar on all devices */
+    padding-top: max(44px, calc(var(--spacing-md) + env(safe-area-inset-top)));
     padding-right: var(--spacing-md);
     padding-bottom: var(--spacing-md);
     padding-left: var(--spacing-md);
