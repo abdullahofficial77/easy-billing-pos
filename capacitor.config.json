@@ -1,5 +1,11 @@
 {
   "appId": "com.easybilling.pos",
   "appName": "Easy Billing POS",
-  "webDir": "dist"
+  "webDir": "dist",
+  "plugins": {
+    "StatusBar": {
+      "overlaysWebView": true,
+      "style": "DARK"
+    }
+  }
 }
