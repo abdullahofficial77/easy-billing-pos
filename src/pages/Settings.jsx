@@ -249,7 +249,7 @@ export default function Settings() {
     return (
         <div>
             <div className="sticky-header page-header">
-                <div className="text-center">
+                <div>
                     <h1 className="page-title">Settings</h1>
                 </div>
             </div>
@@ -380,7 +380,7 @@ export default function Settings() {
                                                         setSettings({ ...settings, receiptConfig: newConfig });
                                                     }}
                                                 />
-                                                <div style={{ display: 'flex', gap: '5px' }}>
+                                                <div style={{ display: 'flex', gap: '8px' }}>
                                                     <button
                                                         disabled={index === 0}
                                                         onClick={() => {
@@ -388,8 +388,8 @@ export default function Settings() {
                                                             [newOrder[index - 1], newOrder[index]] = [newOrder[index], newOrder[index - 1]];
                                                             setSettings({ ...settings, receiptConfig: { ...settings.receiptConfig, order: newOrder } });
                                                         }}
-                                                        className="btn btn-sm"
-                                                        style={{ padding: '2px 8px' }}
+                                                        className="btn btn-move"
+                                                        aria-label="Move up"
                                                     >↑</button>
                                                     <button
                                                         disabled={index === arr.length - 1}
@@ -398,8 +398,8 @@ export default function Settings() {
                                                             [newOrder[index + 1], newOrder[index]] = [newOrder[index], newOrder[index + 1]];
                                                             setSettings({ ...settings, receiptConfig: { ...settings.receiptConfig, order: newOrder } });
                                                         }}
-                                                        className="btn btn-sm"
-                                                        style={{ padding: '2px 8px' }}
+                                                        className="btn btn-move"
+                                                        aria-label="Move down"
                                                     >↓</button>
                                                 </div>
                                             </div>
