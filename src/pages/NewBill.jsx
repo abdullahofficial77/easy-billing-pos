@@ -120,14 +120,14 @@ export default function NewBill() {
     // Search results - show 5 items on focus, filter when typing
     const searchResults = useMemo(() => {
         if (!searchQuery.trim()) {
-            // Show first 5 items when search is focused but empty
-            return allItems.slice(0, 5);
+            // Show more items (50) for browsing inventory
+            return allItems.slice(0, 50);
         }
         const query = searchQuery.toLowerCase();
         return allItems.filter(item =>
             item.name.toLowerCase().includes(query) ||
             (item.category && item.category.toLowerCase().includes(query))
-        ).slice(0, 10);
+        ).slice(0, 50);
     }, [searchQuery, allItems]);
 
     // Calculate totals
