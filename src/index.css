@@ -38,17 +38,17 @@
     --shadow-md: 0 4px 16px rgba(0, 0, 0, 0.4);
     --shadow-lg: 0 8px 32px rgba(0, 0, 0, 0.5);
 
-    /* Spacing - Mobile first (smaller) */
-    --spacing-xs: 2px;
-    --spacing-sm: 5px;
-    --spacing-md: 10px;
-    --spacing-lg: 16px;
-    --spacing-xl: 22px;
+    /* Spacing - Mobile first (Increased) */
+    --spacing-xs: 4px;
+    --spacing-sm: 8px;
+    --spacing-md: 16px;
+    --spacing-lg: 24px;
+    --spacing-xl: 32px;
 
     /* Border Radius */
-    --radius-sm: 6px;
-    --radius-md: 10px;
-    --radius-lg: 14px;
+    --radius-sm: 8px;
+    --radius-md: 12px;
+    --radius-lg: 16px;
     --radius-full: 9999px;
 
     /* Typography */
@@ -61,7 +61,7 @@
     --transition-normal: 250ms ease;
 
     /* Layout */
-    --nav-height: 60px;
+    --nav-height: 65px;
     --sidebar-width: 200px;
     --sidebar-collapsed: 56px;
     --content-start-x: calc(var(--sidebar-width) + var(--spacing-lg));
@@ -78,8 +78,8 @@
 }
 
 html {
-    font-size: 12px;
-    /* Reverted to mobile base */
+    font-size: 16px;
+    /* Standard base size preventing auto-zoom */
     -webkit-tap-highlight-color: transparent;
 }
 
@@ -211,9 +211,11 @@ h4 {
 }
 
 .nav-item svg {
-    width: 20px;
-    height: 20px;
+    width: 24px;
+    height: 24px;
     stroke-width: 2;
+    transform: scale(1.1);
+    /* Slight visual bump */
 }
 
 .nav-item.active {
@@ -424,21 +426,25 @@ h4 {
 }
 
 .input-label {
-    font-size: 0.875rem;
-    font-weight: 500;
-    color: var(--color-text-secondary);
+    font-size: 1.125rem;
+    font-weight: 700;
+    color: var(--color-text-primary);
+    margin-bottom: 4px;
 }
 
 .input {
     width: 100%;
-    padding: var(--spacing-sm) var(--spacing-md);
+    height: 50px;
+    padding: 0 12px;
     background: var(--color-bg-secondary);
     border: 1px solid var(--color-border);
     border-radius: var(--radius-md);
     color: var(--color-text-primary);
-    font-size: 0.9rem;
+    font-size: 1rem;
     font-family: inherit;
     transition: all var(--transition-fast);
+    display: flex;
+    align-items: center;
 }
 
 .input:focus {
@@ -481,7 +487,8 @@ h4 {
     align-items: center;
     justify-content: center;
     gap: var(--spacing-sm);
-    padding: var(--spacing-md) var(--spacing-lg);
+    padding: 0 var(--spacing-lg);
+    min-height: 52px;
     font-size: 1rem;
     font-weight: 600;
     font-family: inherit;
@@ -547,10 +554,15 @@ h4 {
 }
 
 .btn-icon {
-    width: 44px;
-    height: 44px;
+    min-width: 44px;
+    min-height: 44px;
+    width: 48px;
+    height: 48px;
     padding: 0;
     border-radius: var(--radius-md);
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
 
 .btn-sm {
@@ -577,8 +589,13 @@ h4 {
     z-index: 90;
     background-color: var(--color-bg-primary);
     margin: 0 calc(var(--spacing-md) * -1) var(--spacing-md) calc(var(--spacing-md) * -1);
-    padding: calc(var(--spacing-md) + max(48px, env(safe-area-inset-top))) var(--spacing-md) var(--spacing-md) var(--spacing-md);
+    padding: calc(var(--spacing-md) + max(60px, env(safe-area-inset-top))) var(--spacing-md) var(--spacing-md) var(--spacing-md);
     border-bottom: 1px solid var(--color-border);
+    text-align: center;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 60px;
 }
 
 .page-header {
@@ -616,8 +633,8 @@ h4 {
 }
 
 .bill-item-name {
-    font-weight: 600;
-    font-size: 1rem;
+    font-weight: 700;
+    font-size: 1.125rem;
 }
 
 .bill-item-price {
