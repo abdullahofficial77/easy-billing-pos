@@ -72,14 +72,14 @@ export const generateReceiptText = (bill, settings, width = '58mm', itemLayout =
             html += `<div style="${rightStyle}">${rightPart}</div>`;
         }
     }
-}
 
-// Top Line (Before Headings) - Standardized style
-html += '<hr style="border: 0; border-top: 1px dashed #000000; margin: 0; padding: 0; opacity: 1;">';
 
-// 2. Items Table
-if (!options.sections?.itemsTable || options.sections.itemsTable.enabled) {
-    html += `<table style="width: 100%; border-collapse: collapse; font-size: 0.9em;">
+    // Top Line (Before Headings) - Standardized style
+    html += '<hr style="border: 0; border-top: 1px dashed #000000; margin: 0; padding: 0; opacity: 1;">';
+
+    // 2. Items Table
+    if (!options.sections?.itemsTable || options.sections.itemsTable.enabled) {
+        html += `<table style="width: 100%; border-collapse: collapse; font-size: 0.9em;">
             <thead>
                 <tr style="">
                     <th style="${leftStyle} width: 45%; padding-bottom: 0px; font-weight: normal; padding-top: 2px;">${l.item}</th>
@@ -94,57 +94,57 @@ if (!options.sections?.itemsTable || options.sections.itemsTable.enabled) {
             </thead>
             <tbody style="border: 0;">`;
 
-    if (bill.items) {
-        bill.items.forEach(item => {
-            const itemTotal = item.total || (item.price * item.quantity);
-            const qtyStr = item.unitType === 'kg' ? `${item.quantity}kg` :
-                item.unitType === 'gram' ? `${item.quantity}g` :
-                    `${item.quantity}`;
+        if (bill.items) {
+            bill.items.forEach(item => {
+                const itemTotal = item.total || (item.price * item.quantity);
+                const qtyStr = item.unitType === 'kg' ? `${item.quantity}kg` :
+                    item.unitType === 'gram' ? `${item.quantity}g` :
+                        `${item.quantity}`;
 
-            html += `<tr style="margin: 0; padding: 0;">
+                html += `<tr style="margin: 0; padding: 0;">
                     <td style="${leftStyle} padding: 0; color: #000000;">${item.name}</td>
                     <td style="${centerStyle} padding: 0; color: #000000;">${qtyStr}</td>
                     <td style="${rightStyle} padding: 0; color: #000000;">${itemTotal}</td>
                 </tr>`;
-        });
+            });
+        }
+        html += `</tbody></table>`;
+        // Bottom Line (After Items) - Standardized style
+        html += '<hr style="border: 0; border-top: 1px dashed #000000; margin: 0 0 6px 0; padding: 0; opacity: 1;">';
     }
-    html += `</tbody></table>`;
-    // Bottom Line (After Items) - Standardized style
-    html += '<hr style="border: 0; border-top: 1px dashed #000000; margin: 0 0 6px 0; padding: 0; opacity: 1;">';
-}
 
-// 3. Totals
-if (!options.sections?.totals || options.sections.totals.enabled) {
-    const total = bill.total !== undefined ? bill.total : bill.totalAmount;
-    html += `<div style="${rowStyle}"><b>${l.total}:</b> <span>${formatCurrency(total || 0).replace('Rs ', '')}</span></div>`;
-}
-if ((!options.sections?.discount || options.sections.discount.enabled) && bill.discount > 0) {
-    html += `<div style="${rowStyle}"><span>${l.discount}:</span> <span>${formatCurrency(bill.discount).replace('Rs ', '')}</span></div>`;
-}
+    // 3. Totals
+    if (!options.sections?.totals || options.sections.totals.enabled) {
+        const total = bill.total !== undefined ? bill.total : bill.totalAmount;
+        html += `<div style="${rowStyle}"><b>${l.total}:</b> <span>${formatCurrency(total || 0).replace('Rs ', '')}</span></div>`;
+    }
+    if ((!options.sections?.discount || options.sections.discount.enabled) && bill.discount > 0) {
+        html += `<div style="${rowStyle}"><span>${l.discount}:</span> <span>${formatCurrency(bill.discount).replace('Rs ', '')}</span></div>`;
+    }
 
-// Net Total
-if (!options.sections?.netTotal || options.sections.netTotal.enabled) {
-    const total = bill.total !== undefined ? bill.total : bill.totalAmount;
-    const final = bill.finalTotal !== undefined ? bill.finalTotal : (bill.remainingAmount !== undefined ? (total - bill.discount) : total);
-    const displayTotal = final || (total - (bill.discount || 0)) || 0;
+    // Net Total
+    if (!options.sections?.netTotal || options.sections.netTotal.enabled) {
+        const total = bill.total !== undefined ? bill.total : bill.totalAmount;
+        const final = bill.finalTotal !== undefined ? bill.finalTotal : (bill.remainingAmount !== undefined ? (total - bill.discount) : total);
+        const displayTotal = final || (total - (bill.discount || 0)) || 0;
 
-    html += `<div style="${rowStyle} font-weight: bold; font-size: 1.1em; margin-top: 4px;">
+        html += `<div style="${rowStyle} font-weight: bold; font-size: 1.1em; margin-top: 4px;">
             <span>${l.netTotal}:</span> <span>${formatCurrency(displayTotal).replace('Rs ', '')}</span>
         </div>`;
-}
-
-// 4. Footer
-if (!options.sections?.footer || options.sections.footer.enabled) {
-    html += '<br>';
-    if (settings.footerText) {
-        html += `<div style="${centerStyle} font-size: 0.9em;">${settings.footerText}</div>`;
     }
-    if (l.footerBranding) {
-        html += `<div style="${centerStyle} font-size: 0.7em; margin-top: 8px; opacity: 0.7;">${l.footerBranding}</div>`;
-    }
-}
 
-return html;
+    // 4. Footer
+    if (!options.sections?.footer || options.sections.footer.enabled) {
+        html += '<br>';
+        if (settings.footerText) {
+            html += `<div style="${centerStyle} font-size: 0.9em;">${settings.footerText}</div>`;
+        }
+        if (l.footerBranding) {
+            html += `<div style="${centerStyle} font-size: 0.7em; margin-top: 8px; opacity: 0.7;">${l.footerBranding}</div>`;
+        }
+    }
+
+    return html;
 };
 
 export const printReceipt = (content, width = '58mm') => {
