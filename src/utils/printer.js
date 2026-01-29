@@ -109,8 +109,8 @@ export const generateReceiptText = (bill, settings, width = '58mm', itemLayout =
             });
         }
         html += `</tbody></table>`;
-        // Bottom Line (After Items) - Standardized style
-        html += '<hr style="border: 0; border-top: 1px dashed #000000; margin: 0 0 6px 0; padding: 0; opacity: 1;">';
+        // Bottom Line (After Items) - Reverted to simple style but with 0 margin
+        html += '<hr style="border-top: 1px dashed black; margin: 0 0 6px 0; width: 100%;">';
     }
 
     // 3. Totals
