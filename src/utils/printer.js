@@ -74,8 +74,8 @@ export const generateReceiptText = (bill, settings, width = '58mm', itemLayout =
     }
 
 
-    // Top Line (Before Headings) - Standardized style
-    html += '<hr style="border: 0; border-top: 1px dashed #000000; margin: 0; padding: 0; opacity: 1;">';
+    // Top Line (Before Headings) - Reverted to simple style but with 0 margin
+    html += '<hr style="border-top: 1px dashed black; margin: 0; width: 100%;">';
 
     // 2. Items Table
     if (!options.sections?.itemsTable || options.sections.itemsTable.enabled) {
@@ -88,7 +88,7 @@ export const generateReceiptText = (bill, settings, width = '58mm', itemLayout =
                 </tr>
                 <tr>
                     <td colspan="3" style="padding: 0; line-height: 1px; height: 1px;">
-                        <hr style="border: 0; border-top: 1px dashed #000000; margin: 0; padding: 0; opacity: 1;">
+                        <hr style="border-top: 1px dashed black; margin: 0; width: 100%;">
                     </td>
                 </tr>
             </thead>
