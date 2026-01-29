@@ -1229,15 +1229,17 @@ h4 {
     position: relative;
     width: 48px;
     height: 28px;
-    background: var(--color-bg-secondary);
+    background: hsl(220, 15%, 85%);
+    /* Visible gray for inactive state on white bg */
     border-radius: var(--radius-full);
     cursor: pointer;
     transition: background var(--transition-fast);
 }
 
 .toggle.active {
-    background: var(--color-accent);
-    box-shadow: 0 0 10px var(--color-accent-transparent);
+    background: #FFC107;
+    /* Yellowish/Gold for active state */
+    box-shadow: 0 0 10px rgba(255, 193, 7, 0.4);
 }
 
 .toggle::after {
