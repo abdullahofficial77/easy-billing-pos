@@ -77,20 +77,20 @@ export const generateReceiptText = (bill, settings, width = '58mm', itemLayout =
     // Top Line (Before Headings) - Reverted to simple style but with 0 margin
 
     // Top Line (Before Headings)
-    html += '<hr style="border-top: 1px dashed black; margin: 0;">';
+    html += '<hr class="separator-line" style="border-top: 1px dashed black; margin: 2px 0;">';
 
     // 2. Items Table
     if (!options.sections?.itemsTable || options.sections.itemsTable.enabled) {
         html += `<table style="width: 100%; border-collapse: collapse; font-size: 0.9em;">
             <thead>
                 <tr style="">
-                    <th style="${leftStyle} width: 45%; padding-bottom: 0; font-weight: normal;">${l.item}</th>
-                    <th style="${centerStyle} width: 25%; padding-bottom: 0; font-weight: normal;">${l.qty}</th>
-                    <th style="${rightStyle} width: 30%; padding-bottom: 0; font-weight: normal;">${l.price}</th>
+                    <th style="${leftStyle} width: 45%; padding-bottom: 2px; font-weight: normal;">${l.item}</th>
+                    <th style="${centerStyle} width: 25%; padding-bottom: 2px; font-weight: normal;">${l.qty}</th>
+                    <th style="${rightStyle} width: 30%; padding-bottom: 2px; font-weight: normal;">${l.price}</th>
                 </tr>
                 <tr>
-                    <td colspan="3" style="padding: 0; line-height: 0;">
-                        <hr style="border-top: 1px dashed black; margin: 0;">
+                    <td colspan="3" class="separator-container" style="padding: 0; line-height: 2px;">
+                        <hr class="separator-line" style="border-top: 1px dashed black; margin: 2px 0 2px 0;">
                     </td>
                 </tr>
             </thead>
@@ -104,48 +104,49 @@ export const generateReceiptText = (bill, settings, width = '58mm', itemLayout =
                         `${item.quantity}`;
 
                 html += `<tr>
-                    <td style="${leftStyle} padding: 0;">${item.name}</td>
-                    <td style="${centerStyle} padding: 0;">${qtyStr}</td>
-                    <td style="${rightStyle} padding: 0;">${itemTotal}</td>
+                    <td style="${leftStyle} padding: 2px 0;">${item.name}</td>
+                    <td style="${centerStyle} padding: 2px 0;">${qtyStr}</td>
+                    <td style="${rightStyle} padding: 2px 0;">${itemTotal}</td>
                 </tr>`;
             });
         }
         html += `</tbody></table>`;
-        html += '<hr style="border-top: 1px dashed black; margin: 0 0 6px 0;">';
+        html += '<hr class="separator-line" style="border-top: 1px dashed black; margin: 2px 0 6px 0;">';
     }
+}
 
-    // 3. Totals
-    if (!options.sections?.totals || options.sections.totals.enabled) {
-        const total = bill.total !== undefined ? bill.total : bill.totalAmount;
-        html += `<div style="${rowStyle}"><b>${l.total}:</b> <span>${formatCurrency(total || 0).replace('Rs ', '')}</span></div>`;
-    }
-    if ((!options.sections?.discount || options.sections.discount.enabled) && bill.discount > 0) {
-        html += `<div style="${rowStyle}"><span>${l.discount}:</span> <span>${formatCurrency(bill.discount).replace('Rs ', '')}</span></div>`;
-    }
+// 3. Totals
+if (!options.sections?.totals || options.sections.totals.enabled) {
+    const total = bill.total !== undefined ? bill.total : bill.totalAmount;
+    html += `<div style="${rowStyle}"><b>${l.total}:</b> <span>${formatCurrency(total || 0).replace('Rs ', '')}</span></div>`;
+}
+if ((!options.sections?.discount || options.sections.discount.enabled) && bill.discount > 0) {
+    html += `<div style="${rowStyle}"><span>${l.discount}:</span> <span>${formatCurrency(bill.discount).replace('Rs ', '')}</span></div>`;
+}
 
-    // Net Total
-    if (!options.sections?.netTotal || options.sections.netTotal.enabled) {
-        const total = bill.total !== undefined ? bill.total : bill.totalAmount;
-        const final = bill.finalTotal !== undefined ? bill.finalTotal : (bill.remainingAmount !== undefined ? (total - bill.discount) : total);
-        const displayTotal = final || (total - (bill.discount || 0)) || 0;
+// Net Total
+if (!options.sections?.netTotal || options.sections.netTotal.enabled) {
+    const total = bill.total !== undefined ? bill.total : bill.totalAmount;
+    const final = bill.finalTotal !== undefined ? bill.finalTotal : (bill.remainingAmount !== undefined ? (total - bill.discount) : total);
+    const displayTotal = final || (total - (bill.discount || 0)) || 0;
 
-        html += `<div style="${rowStyle} font-weight: bold; font-size: 1.1em; margin-top: 4px;">
+    html += `<div style="${rowStyle} font-weight: bold; font-size: 1.1em; margin-top: 4px;">
             <span>${l.netTotal}:</span> <span>${formatCurrency(displayTotal).replace('Rs ', '')}</span>
         </div>`;
-    }
+}
 
-    // 4. Footer
-    if (!options.sections?.footer || options.sections.footer.enabled) {
-        html += '<br>';
-        if (settings.footerText) {
-            html += `<div style="${centerStyle} font-size: 0.9em;">${settings.footerText}</div>`;
-        }
-        if (l.footerBranding) {
-            html += `<div style="${centerStyle} font-size: 0.7em; margin-top: 8px; opacity: 0.7;">${l.footerBranding}</div>`;
-        }
+// 4. Footer
+if (!options.sections?.footer || options.sections.footer.enabled) {
+    html += '<br>';
+    if (settings.footerText) {
+        html += `<div style="${centerStyle} font-size: 0.9em;">${settings.footerText}</div>`;
     }
+    if (l.footerBranding) {
+        html += `<div style="${centerStyle} font-size: 0.7em; margin-top: 8px; opacity: 0.7;">${l.footerBranding}</div>`;
+    }
+}
 
-    return html;
+return html;
 };
 
 export const printReceipt = (content, width = '58mm') => {
@@ -195,7 +196,8 @@ export const printReceipt = (content, width = '58mm') => {
                         color: #000000 !important;
                         font-weight: normal !important;
                     }
-                    #${overlayId} hr {
+                    /* Standardize Separator Lines */
+                    #${overlayId} .separator-line {
                         border: 0 !important;
                         border-top: 1px dashed #000000 !important;
                         margin: 0 !important;
@@ -204,10 +206,11 @@ export const printReceipt = (content, width = '58mm') => {
                         width: 100% !important;
                         display: block !important;
                     }
-                    /* Remove spacer lines in print */
-                    #${overlayId} td[style*="line-height"] {
+                    /* Remove spacing from containers holding lines */
+                    #${overlayId} .separator-container {
                         line-height: 0 !important;
                         height: 0 !important;
+                        padding: 0 !important;
                     }
                     
                     @page {
