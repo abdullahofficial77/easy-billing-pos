@@ -76,25 +76,25 @@ export const generateReceiptText = (bill, settings, width = '58mm', itemLayout =
 
     // Top Line (Before Headings) - Reverted to simple style but with 0 margin
 
-    // Top Line (Before Headings) - Enforcing Pitch Black #000000
-    html += '<hr style="border: 0; border-top: 1px dashed #000000; margin: 0; width: 100%; height: 0; opacity: 1;">';
+    // Top Line (Before Headings)
+    html += '<hr style="border-top: 1px dashed black; margin: 2px 0;">';
 
     // 2. Items Table
     if (!options.sections?.itemsTable || options.sections.itemsTable.enabled) {
         html += `<table style="width: 100%; border-collapse: collapse; font-size: 0.9em;">
             <thead>
                 <tr style="">
-                    <th style="${leftStyle} width: 45%; padding-bottom: 0px; font-weight: normal; padding-top: 0; color: #000000;">${l.item}</th>
-                    <th style="${centerStyle} width: 25%; padding-bottom: 0px; font-weight: normal; padding-top: 0; color: #000000;">${l.qty}</th>
-                    <th style="${rightStyle} width: 30%; padding-bottom: 0px; font-weight: normal; padding-top: 0; color: #000000;">${l.price}</th>
+                    <th style="${leftStyle} width: 45%; padding-bottom: 2px; font-weight: normal;">${l.item}</th>
+                    <th style="${centerStyle} width: 25%; padding-bottom: 2px; font-weight: normal;">${l.qty}</th>
+                    <th style="${rightStyle} width: 30%; padding-bottom: 2px; font-weight: normal;">${l.price}</th>
                 </tr>
                 <tr>
-                    <td colspan="3" style="padding: 0; line-height: 0; height: 0;">
-                        <hr style="border: 0; border-top: 1px dashed #000000; margin: 0; width: 100%; height: 0; opacity: 1;">
+                    <td colspan="3" style="padding: 0; line-height: 2px;">
+                        <hr style="border-top: 1px dashed black; margin: 2px 0 2px 0;">
                     </td>
                 </tr>
             </thead>
-            <tbody style="border: 0;">`;
+            <tbody>`;
 
         if (bill.items) {
             bill.items.forEach(item => {
@@ -103,16 +103,15 @@ export const generateReceiptText = (bill, settings, width = '58mm', itemLayout =
                     item.unitType === 'gram' ? `${item.quantity}g` :
                         `${item.quantity}`;
 
-                html += `<tr style="margin: 0; padding: 0;">
-                    <td style="${leftStyle} padding: 0; color: #000000;">${item.name}</td>
-                    <td style="${centerStyle} padding: 0; color: #000000;">${qtyStr}</td>
-                    <td style="${rightStyle} padding: 0; color: #000000;">${itemTotal}</td>
+                html += `<tr>
+                    <td style="${leftStyle} padding: 2px 0;">${item.name}</td>
+                    <td style="${centerStyle} padding: 2px 0;">${qtyStr}</td>
+                    <td style="${rightStyle} padding: 2px 0;">${itemTotal}</td>
                 </tr>`;
             });
         }
         html += `</tbody></table>`;
-        // Bottom Line (After Items) - Enforcing Pitch Black #000000
-        html += '<hr style="border: 0; border-top: 1px dashed #000000; margin: 0 0 6px 0; width: 100%; height: 0; opacity: 1;">';
+        html += '<hr style="border-top: 1px dashed black; margin: 2px 0 6px 0;">';
     }
 
     // 3. Totals
@@ -178,19 +177,39 @@ export const printReceipt = (content, width = '58mm') => {
                         top: 0;
                         width: ${cssWidth};
                         margin: 0;
-                        padding: 0 2mm; /* Fixed horizontal spacing */
-                        box-sizing: border-box; /* Include padding in width */
+                        padding: 0 2mm; 
+                        box-sizing: border-box; 
                         background: white;
                         font-family: 'Courier New', Courier, monospace;
                         font-size: 12px;
                         color: #000000 !important;
                     }
-                    /* Enforce strict styling on all children */
-                    #${overlayId} * {
-                        color: #000000 !important; /* All colors same (black) */
-                        font-weight: normal !important; /* No bold */
-                        opacity: 1 !important; /* No grey/transparent */
+                    /* PRINT SPECIALIZED OVERRIDES */
+                    #${overlayId} table {
+                        width: 100%;
+                        border-collapse: collapse;
                     }
+                    #${overlayId} th, 
+                    #${overlayId} td {
+                        padding: 0 !important; /* Force 0 padding on print */
+                        color: #000000 !important;
+                        font-weight: normal !important;
+                    }
+                    #${overlayId} hr {
+                        border: 0 !important;
+                        border-top: 1px dashed #000000 !important;
+                        margin: 0 !important;
+                        height: 0 !important;
+                        opacity: 1 !important;
+                        width: 100% !important;
+                        display: block !important;
+                    }
+                    /* Remove spacer lines in print */
+                    #${overlayId} td[style*="line-height"] {
+                        line-height: 0 !important;
+                        height: 0 !important;
+                    }
+                    
                     @page {
                         size: ${cssWidth} auto;
                         margin: 0;
