@@ -22,7 +22,7 @@ export const generateReceiptText = (bill, settings, width = '58mm', itemLayout =
     const centerStyle = 'text-align: center;';
     const leftStyle = 'text-align: left;';
     const rightStyle = 'text-align: right;';
-    const rowStyle = 'display: flex; justify-content: space-between; margin-bottom: 2px;';
+    const rowStyle = 'display: flex; justify-content: space-between; margin-bottom: 0px;';
 
     // 1. Header Sections
     // Shop Info
@@ -74,10 +74,8 @@ export const generateReceiptText = (bill, settings, width = '58mm', itemLayout =
     }
 
 
-    // Top Line (Before Headings) - Reverted to simple style but with 0 margin
-
     // Top Line (Before Headings)
-    html += '<hr class="separator-line" style="border-top: 1px dashed black; margin: 2px 0;">';
+    html += '<hr class="separator-line" style="border-top: 1px dashed black; margin: 0;">';
 
     // 2. Items Table
     if (!options.sections?.itemsTable || options.sections.itemsTable.enabled) {
@@ -90,7 +88,7 @@ export const generateReceiptText = (bill, settings, width = '58mm', itemLayout =
                 </tr>
                 <tr>
                     <td colspan="3" style="padding: 0; line-height: 2px;">
-                        <hr class="separator-line" style="border-top: 1px dashed black; margin: 2px 0 2px 0;">
+                        <hr class="separator-line" style="border-top: 1px dashed black; margin: 0;">
                     </td>
                 </tr>
             </thead>
@@ -104,14 +102,14 @@ export const generateReceiptText = (bill, settings, width = '58mm', itemLayout =
                         `${item.quantity}`;
 
                 html += `<tr>
-                    <td style="${leftStyle} padding: 2px 0;">${item.name}</td>
-                    <td style="${centerStyle} padding: 2px 0;">${qtyStr}</td>
-                    <td style="${rightStyle} padding: 2px 0;">${itemTotal}</td>
+                    <td style="${leftStyle} padding: 0;">${item.name}</td>
+                    <td style="${centerStyle} padding: 0;">${qtyStr}</td>
+                    <td style="${rightStyle} padding: 0;">${itemTotal}</td>
                 </tr>`;
             });
         }
         html += `</tbody></table>`;
-        html += '<hr class="separator-line" style="border-top: 1px dashed black; margin: 2px 0 6px 0;">';
+        html += '<hr class="separator-line" style="border-top: 1px dashed black; margin: 0;">';
     }
 
     // 3. Totals
@@ -187,13 +185,18 @@ export const printReceipt = (content, width = '58mm') => {
                     /* PRINT SPECIALIZED OVERRIDES */
                     #${overlayId} table {
                         width: 100%;
-                        border-collapse: collapse;
+                        border-collapse: collapse !important;
+                        border-spacing: 0 !important;
                     }
                     #${overlayId} th, 
-                    #${overlayId} td {
+                    #${overlayId} td,
+                    #${overlayId} tr {
                         padding: 0 !important; /* Force 0 padding on print */
                         color: #000000 !important;
                         font-weight: normal !important;
+                    }
+                    #${overlayId} td {
+                        line-height: 1.0 !important; /* Architect Spec: Pull lines close */
                     }
                     /* Standardize Separator Lines */
                     #${overlayId} .separator-line {
