@@ -80,9 +80,15 @@ export const generateReceiptText = (bill, settings, width = '58mm', itemLayout =
         html += `<table style="width: 100%; border-collapse: collapse; font-size: 0.9em;">
             <thead>
                 <tr style="">
-                    <th style="${leftStyle} width: 45%; padding-bottom: 4px; border-bottom: 1px dashed black; font-weight: normal;">${l.item}</th>
-                    <th style="${centerStyle} width: 25%; padding-bottom: 4px; border-bottom: 1px dashed black; font-weight: normal;">${l.qty}</th>
-                    <th style="${rightStyle} width: 30%; padding-bottom: 4px; border-bottom: 1px dashed black; font-weight: normal;">${l.price}</th>
+                    <th style="${leftStyle} width: 45%; padding-bottom: 2px; font-weight: normal;">${l.item}</th>
+                    <th style="${centerStyle} width: 25%; padding-bottom: 2px; font-weight: normal;">${l.qty}</th>
+                    <th style="${rightStyle} width: 30%; padding-bottom: 2px; font-weight: normal;">${l.price}</th>
+                </tr>
+                <tr>
+                    <td colspan="3" style="padding: 0;">
+                        <hr style="border-top: 1px dashed black; margin: 2px 0;">
+                    </td>
+                </tr>
                 </tr>
             </thead>
             <tbody>`;
