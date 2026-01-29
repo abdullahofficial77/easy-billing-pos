@@ -143,12 +143,7 @@ export default function AllItems() {
 
     return (
         <div>
-            <div className="page-header sticky-header" style={{
-                position: 'sticky',
-                display: 'flex',
-                justifyContent: 'space-between',
-                alignItems: 'center'
-            }}>
+            <div className={`page-header sticky-header`}>
                 <div>
                     <h1 className="page-title">All Items</h1>
                     <p className="page-subtitle">{items.length} items</p>
