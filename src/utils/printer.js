@@ -85,12 +85,12 @@ export const generateReceiptText = (bill, settings, width = '58mm', itemLayout =
                     <th style="${rightStyle} width: 30%; padding-bottom: 2px; font-weight: normal;">${l.price}</th>
                 </tr>
                 <tr>
-                    <td colspan="3" style="padding: 0; line-height: 2px;">
-                        <hr style="border-top: 1px dashed black; margin: 2px 0 2px 0;">
+                    <td colspan="3" style="padding: 0; line-height: 1px; height: 1px;">
+                        <hr style="border: 0; border-top: 1px dashed #000000; margin: 0; padding: 0; opacity: 1;">
                     </td>
                 </tr>
             </thead>
-            <tbody>`;
+            <tbody style="border: 0;">`;
 
         if (bill.items) {
             bill.items.forEach(item => {
@@ -99,10 +99,10 @@ export const generateReceiptText = (bill, settings, width = '58mm', itemLayout =
                     item.unitType === 'gram' ? `${item.quantity}g` :
                         `${item.quantity}`;
 
-                html += `<tr>
-                    <td style="${leftStyle} padding: 2px 0;">${item.name}</td>
-                    <td style="${centerStyle} padding: 2px 0;">${qtyStr}</td>
-                    <td style="${rightStyle} padding: 2px 0;">${itemTotal}</td>
+                html += `<tr style="margin: 0; padding: 0;">
+                    <td style="${leftStyle} padding: 1px 0; color: #000000;">${item.name}</td>
+                    <td style="${centerStyle} padding: 1px 0; color: #000000;">${qtyStr}</td>
+                    <td style="${rightStyle} padding: 1px 0; color: #000000;">${itemTotal}</td>
                 </tr>`;
             });
         }
