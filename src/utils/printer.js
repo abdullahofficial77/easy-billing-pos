@@ -89,7 +89,7 @@ export const generateReceiptText = (bill, settings, width = '58mm', itemLayout =
                     <th style="${rightStyle} width: 30%; padding-bottom: 2px; font-weight: normal;">${l.price}</th>
                 </tr>
                 <tr>
-                    <td colspan="3" class="separator-container" style="padding: 0; line-height: 2px;">
+                    <td colspan="3" style="padding: 0; line-height: 2px;">
                         <hr class="separator-line" style="border-top: 1px dashed black; margin: 2px 0 2px 0;">
                     </td>
                 </tr>
@@ -205,8 +205,8 @@ export const printReceipt = (content, width = '58mm') => {
                         width: 100% !important;
                         display: block !important;
                     }
-                    /* Remove spacing from containers holding lines */
-                    #${overlayId} .separator-container {
+                    /* Remove spacer lines in print */
+                    #${overlayId} td[style*="line-height"] {
                         line-height: 0 !important;
                         height: 0 !important;
                         padding: 0 !important;
