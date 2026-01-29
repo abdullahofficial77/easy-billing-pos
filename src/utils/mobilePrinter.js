@@ -96,6 +96,16 @@ export const printReceiptMobile = async (htmlContent, width = '58mm') => {
     } catch (error) {
         console.error('Mobile print failed:', error);
 
+        // Try one last desperate attempt for Android: window.open
+        // Some Android WebViews might handle this better than Browser plugin for data URLs
+        try {
+            console.log('Attempting window.open backup...');
+            const win = window.open(dataUrl, '_blank');
+            if (win) return; // If it opened, we are good
+        } catch (e) {
+            console.error('window.open backup failed:', e);
+        }
+
         // Fallback: try iframe method even on mobile
         console.warn('Falling back to iframe printing method');
         return printReceipt(htmlContent, width);

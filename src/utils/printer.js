@@ -144,12 +144,15 @@ export const printReceipt = (content, width = '58mm') => {
         // Create a hidden iframe
         let iframe = document.createElement('iframe');
         iframe.style.position = 'fixed';
-        // Move strictly off-screen
-        iframe.style.top = '-10000px';
-        iframe.style.left = '-10000px';
-        // Keep non-zero size to ensure render engine acknowledges it (required for some browsers to print)
+        // Make it "visible" but transparent for Android WebView compatibility
+        // Off-screen iframes (-10000px) often fail to trigger print dialog on Android, freezing the app
+        iframe.style.top = '0';
+        iframe.style.left = '0';
         iframe.style.width = '1px';
         iframe.style.height = '1px';
+        iframe.style.opacity = '0.01'; // Not 0, just in case
+        iframe.style.pointerEvents = 'none';
+        iframe.style.zIndex = '-1000'; // Behind everything but exists in viewport
         iframe.style.border = '0';
         document.body.appendChild(iframe);
 
