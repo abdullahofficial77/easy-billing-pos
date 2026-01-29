@@ -100,9 +100,9 @@ export const generateReceiptText = (bill, settings, width = '58mm', itemLayout =
                         `${item.quantity}`;
 
                 html += `<tr style="margin: 0; padding: 0;">
-                    <td style="${leftStyle} padding: 1px 0; color: #000000;">${item.name}</td>
-                    <td style="${centerStyle} padding: 1px 0; color: #000000;">${qtyStr}</td>
-                    <td style="${rightStyle} padding: 1px 0; color: #000000;">${itemTotal}</td>
+                    <td style="${leftStyle} padding: 0; color: #000000;">${item.name}</td>
+                    <td style="${centerStyle} padding: 0; color: #000000;">${qtyStr}</td>
+                    <td style="${rightStyle} padding: 0; color: #000000;">${itemTotal}</td>
                 </tr>`;
             });
         }
