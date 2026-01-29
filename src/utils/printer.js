@@ -75,7 +75,8 @@ export const generateReceiptText = (bill, settings, width = '58mm', itemLayout =
 
 
     // Top Line (Before Headings) - Reverted to simple style but with 0 margin
-    html += '<hr style="border-top: 1px dashed black; margin: 0; width: 100%;">';
+    // Top Line (Before Headings) - Standardized consistent style
+    html += '<hr style="border: 0; border-top: 1px dashed black; margin: 0; width: 100%; height: 0;">';
 
     // 2. Items Table
     if (!options.sections?.itemsTable || options.sections.itemsTable.enabled) {
@@ -87,8 +88,8 @@ export const generateReceiptText = (bill, settings, width = '58mm', itemLayout =
                     <th style="${rightStyle} width: 30%; padding-bottom: 0px; font-weight: normal; padding-top: 2px;">${l.price}</th>
                 </tr>
                 <tr>
-                    <td colspan="3" style="padding: 0; line-height: 1px; height: 1px;">
-                        <hr style="border-top: 1px dashed black; margin: 0; width: 100%;">
+                    <td colspan="3" style="padding: 0; line-height: 0; height: 0;">
+                        <hr style="border: 0; border-top: 1px dashed black; margin: 0; width: 100%; height: 0;">
                     </td>
                 </tr>
             </thead>
@@ -109,8 +110,8 @@ export const generateReceiptText = (bill, settings, width = '58mm', itemLayout =
             });
         }
         html += `</tbody></table>`;
-        // Bottom Line (After Items) - Reverted to simple style but with 0 margin
-        html += '<hr style="border-top: 1px dashed black; margin: 0 0 6px 0; width: 100%;">';
+        // Bottom Line (After Items) - Standardized consistent style
+        html += '<hr style="border: 0; border-top: 1px dashed black; margin: 0 0 6px 0; width: 100%; height: 0;">';
     }
 
     // 3. Totals
