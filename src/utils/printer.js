@@ -173,7 +173,7 @@ export const printReceipt = (content, width = '58mm') => {
                         top: 0;
                         width: ${cssWidth};
                         margin: 0;
-                        padding: 0 5mm; /* Fixed horizontal spacing */
+                        padding: 0 2mm; /* Fixed horizontal spacing */
                         box-sizing: border-box; /* Include padding in width */
                         background: white;
                         font-family: 'Courier New', Courier, monospace;
