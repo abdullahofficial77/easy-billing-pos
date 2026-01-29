@@ -6,43 +6,45 @@
 /* CSS Variables - Dark Theme (Default) */
 :root {
     /* === THEME HUE TOKENS === */
-    --hue-primary: 245;
-    --hue-accent: 252;
+    --hue-primary: 225;
+    /* More neutral deep blue-grey */
+    --hue-accent: 260;
+    /* Richer Purple */
 
-    /* Surface Colors (Dark Mode) */
-    --color-bg-primary: hsl(var(--hue-primary) 30% 6%);
-    --color-bg-secondary: hsl(var(--hue-primary) 28% 11%);
-    --color-bg-card: hsl(var(--hue-primary) 26% 16%);
-    --color-bg-elevated: hsl(var(--hue-primary) 24% 21%);
+    /* Surface Colors (Dark Mode) - Deep, Rich tones */
+    --color-bg-primary: hsl(var(--hue-primary) 25% 10%);
+    --color-bg-secondary: hsl(var(--hue-primary) 20% 15%);
+    --color-bg-card: hsl(var(--hue-primary) 20% 18%);
+    --color-bg-elevated: hsl(var(--hue-primary) 20% 22%);
 
-    /* Accent Colors */
-    --color-accent: hsl(var(--hue-accent) 70% 60%);
-    --color-accent-hover: hsl(var(--hue-accent) 75% 65%);
-    --color-accent-light: hsl(var(--hue-accent) 70% 60% / 0.15);
-    --color-accent-glow: hsl(var(--hue-accent) 70% 60% / 0.25);
+    /* Accent Colors - Vibrant and Neon-like for Dark Mode */
+    --color-accent: hsl(var(--hue-accent) 90% 65%);
+    --color-accent-hover: hsl(var(--hue-accent) 90% 70%);
+    --color-accent-light: hsl(var(--hue-accent) 90% 65% / 0.15);
+    --color-accent-glow: hsl(var(--hue-accent) 90% 65% / 0.3);
 
-    /* Semantic Colors */
-    --color-success: hsl(160 84% 43%);
-    --color-success-light: hsl(160 84% 43% / 0.15);
-    --color-warning: hsl(45 100% 51%);
-    --color-warning-light: hsl(45 100% 51% / 0.15);
-    --color-danger: hsl(0 84% 65%);
-    --color-danger-light: hsl(0 84% 65% / 0.15);
+    /* Semantic Colors - High Brightness for Visibility */
+    --color-success: hsl(150 90% 45%);
+    --color-success-light: hsl(150 90% 45% / 0.15);
+    --color-warning: hsl(45 100% 60%);
+    --color-warning-light: hsl(45 100% 60% / 0.15);
+    --color-danger: hsl(0 90% 65%);
+    --color-danger-light: hsl(0 90% 65% / 0.15);
 
-    /* Text Colors */
+    /* Text Colors - High Contrast */
     --color-text-primary: hsl(0 0% 100%);
-    --color-text-secondary: hsl(var(--hue-primary) 15% 70%);
-    --color-text-muted: hsl(var(--hue-primary) 12% 50%);
+    --color-text-secondary: hsl(var(--hue-primary) 10% 80%);
+    --color-text-muted: hsl(var(--hue-primary) 10% 60%);
 
     /* Border Colors */
-    --color-border: hsl(var(--hue-primary) 20% 28%);
-    --color-border-light: hsl(var(--hue-primary) 18% 22%);
+    --color-border: hsl(var(--hue-primary) 20% 30%);
+    --color-border-light: hsl(var(--hue-primary) 20% 25%);
 
     /* Shadows */
-    --shadow-color: 0 0% 0%;
-    --shadow-sm: 0 2px 8px hsl(var(--shadow-color) / 0.3);
-    --shadow-md: 0 4px 16px hsl(var(--shadow-color) / 0.4);
-    --shadow-lg: 0 8px 32px hsl(var(--shadow-color) / 0.5);
+    --shadow-color: 220 50% 5%;
+    --shadow-sm: 0 2px 8px hsl(var(--shadow-color) / 0.5);
+    --shadow-md: 0 4px 16px hsl(var(--shadow-color) / 0.6);
+    --shadow-lg: 0 8px 32px hsl(var(--shadow-color) / 0.7);
 
     /* Spacing - Mobile first */
     --spacing-xs: 4px;
@@ -75,44 +77,44 @@
     --content-max-width: 900px;
 }
 
-/* Light Theme - Soft Elevation Design */
+/* Light Theme - Clean, Crisp, High Contrast */
 [data-theme="light"] {
     --hue-primary: 220;
 
-    /* Surface Colors - Soft greys for elevation */
-    --color-bg-primary: hsl(220 20% 97%);
-    --color-bg-secondary: hsl(220 15% 100%);
+    /* Surface Colors - Clean White/Off-White */
+    --color-bg-primary: hsl(220 20% 98%);
+    --color-bg-secondary: hsl(0 0% 100%);
     --color-bg-card: hsl(0 0% 100%);
-    --color-bg-elevated: hsl(220 18% 96%);
+    --color-bg-elevated: hsl(0 0% 100%);
 
-    /* Accent - Darkened for contrast */
-    --color-accent: hsl(252 65% 50%);
-    --color-accent-hover: hsl(252 70% 45%);
-    --color-accent-light: hsl(252 65% 50% / 0.12);
-    --color-accent-glow: hsl(252 65% 50% / 0.2);
+    /* Accent - Darker, Stronger for Light Mode */
+    --color-accent: hsl(260 85% 55%);
+    --color-accent-hover: hsl(260 90% 50%);
+    --color-accent-light: hsl(260 85% 55% / 0.1);
+    --color-accent-glow: hsl(260 85% 55% / 0.25);
 
-    /* Semantic - Darkened for light bg */
-    --color-success: hsl(160 84% 35%);
-    --color-success-light: hsl(160 84% 35% / 0.12);
-    --color-warning: hsl(40 100% 45%);
-    --color-warning-light: hsl(40 100% 45% / 0.12);
-    --color-danger: hsl(0 75% 55%);
-    --color-danger-light: hsl(0 75% 55% / 0.12);
+    /* Semantic - Deep, Readable Colors */
+    --color-success: hsl(150 80% 35%);
+    --color-success-light: hsl(150 80% 35% / 0.12);
+    --color-warning: hsl(40 100% 40%);
+    --color-warning-light: hsl(40 100% 40% / 0.12);
+    --color-danger: hsl(0 80% 55%);
+    --color-danger-light: hsl(0 80% 55% / 0.12);
 
-    /* Text - WCAG 4.5:1 contrast verified */
-    --color-text-primary: hsl(220 20% 15%);
-    --color-text-secondary: hsl(220 12% 40%);
-    --color-text-muted: hsl(220 10% 55%);
+    /* Text - Very Dark Grey for Sharp Contrast */
+    --color-text-primary: hsl(220 30% 10%);
+    --color-text-secondary: hsl(220 15% 40%);
+    --color-text-muted: hsl(220 10% 60%);
 
-    /* Borders - Subtle for light mode */
+    /* Borders - Distinct but Light */
     --color-border: hsl(220 15% 88%);
-    --color-border-light: hsl(220 12% 92%);
+    --color-border-light: hsl(220 10% 94%);
 
-    /* Shadows - Soft and diffused */
-    --shadow-color: 220 15% 60%;
-    --shadow-sm: 0 1px 3px hsl(var(--shadow-color) / 0.08);
-    --shadow-md: 0 4px 12px hsl(var(--shadow-color) / 0.1);
-    --shadow-lg: 0 8px 24px hsl(var(--shadow-color) / 0.12);
+    /* Shadows - Soft, Colorful shadows for modern look */
+    --shadow-color: 220 40% 60%;
+    --shadow-sm: 0 2px 6px hsl(var(--shadow-color) / 0.1);
+    --shadow-md: 0 6px 16px hsl(var(--shadow-color) / 0.12);
+    --shadow-lg: 0 12px 32px hsl(var(--shadow-color) / 0.14);
 }
 
 /* ===================================
@@ -673,9 +675,10 @@ h4 {
 .input {
     width: 100%;
     height: 50px;
-    padding: 0 12px;
+    padding: 0 16px;
     background: var(--color-bg-secondary);
-    border: 1px solid var(--color-border);
+    border: 2px solid var(--color-border);
+    /* Thicker border for better visibility */
     border-radius: var(--radius-md);
     color: var(--color-text-primary);
     font-size: 1rem;
@@ -688,16 +691,18 @@ h4 {
 .input:focus {
     outline: none;
     border-color: var(--color-accent);
-    box-shadow: 0 0 0 3px var(--color-accent-light);
+    background: var(--color-bg-card);
+    box-shadow: 0 0 0 4px var(--color-accent-light);
 }
 
 .input-error {
     border-color: var(--color-danger);
+    background: var(--color-danger-light);
 }
 
 .input-error:focus {
     border-color: var(--color-danger);
-    box-shadow: 0 0 0 3px rgba(220, 38, 38, 0.2);
+    box-shadow: 0 0 0 4px var(--color-danger-light);
 }
 
 .input::placeholder {
@@ -885,12 +890,14 @@ h4 {
     display: flex;
     align-items: center;
     justify-content: space-between;
+    flex-wrap: wrap;
+    gap: var(--spacing-sm);
 }
 
 .qty-control {
     display: flex;
     align-items: center;
-    gap: var(--spacing-sm);
+    gap: 2px;
 }
 
 .qty-btn {

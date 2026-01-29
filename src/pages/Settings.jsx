@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import { getAllSettings, saveSettings, addCategory, addItem, getAllCategories, getAllItems, clearAllItems, clearAllCategories, clearAllBills, clearAllDrafts } from '../db/database';
 import { generateReceiptText } from '../utils/printer';
+import { printReceiptMobile } from '../utils/mobilePrinter';
 import { INITIAL_DATA } from '../utils/initialData';
 import { useTheme } from '../components/ThemeProvider';
 
@@ -41,6 +42,7 @@ export default function Settings() {
         }
     });
     const [saved, setSaved] = useState(false);
+    const [printing, setPrinting] = useState(false);
     const [populating, setPopulating] = useState(false);
     const { theme, toggle: toggleTheme } = useTheme();
 
@@ -240,12 +242,17 @@ export default function Settings() {
         return generateReceiptText(testBill, previewSettings, settings.printWidth, itemLayout, labels, options);
     };
 
-    const handleTestPrint = () => {
-        const content = previewReceipt();
-        const win = window.open('', 'Print', 'width=400,height=600');
-        win.document.write(`<pre style="font-family: monospace; white-space: pre-wrap;">${content}</pre>`);
-        win.document.close();
-        win.print();
+    const handleTestPrint = async () => {
+        setPrinting(true);
+        try {
+            const content = previewReceipt();
+            await printReceiptMobile(content, settings.printWidth);
+        } catch (error) {
+            console.error('Print failed:', error);
+            alert('Print failed. Please try again.');
+        } finally {
+            setPrinting(false);
+        }
     };
 
     return (
@@ -274,13 +281,14 @@ export default function Settings() {
                             style={{
                                 minWidth: '80px',
                                 padding: '10px 16px',
-                                background: theme === 'dark' ? 'var(--color-bg-elevated)' : 'var(--color-accent)',
-                                color: theme === 'dark' ? 'var(--color-text-primary)' : '#fff',
+                                background: theme === 'dark' ? '#FFFFFF' : '#000000',
+                                color: theme === 'dark' ? '#000000' : '#FFFFFF',
                                 border: 'none',
                                 borderRadius: 'var(--radius-md)',
                                 fontSize: '0.9rem',
-                                fontWeight: 500,
-                                cursor: 'pointer'
+                                fontWeight: 600,
+                                cursor: 'pointer',
+                                boxShadow: theme === 'dark' ? '0 2px 8px rgba(255,255,255,0.2)' : '0 2px 8px rgba(0,0,0,0.2)'
                             }}
                         >
                             {theme === 'dark' ? '☀️ Light' : '🌙 Dark'}
@@ -518,10 +526,13 @@ export default function Settings() {
 
                         <h4 className="text-sm font-bold text-secondary uppercase tracking-wider mb-xs">Live Preview</h4>
 
-                        <div style={{ position: 'relative' }}>
-                            <pre className={`receipt-preview receipt-preview-${settings.printWidth}`}>
-                                {previewReceipt()}
-                            </pre>
+                        <div style={{ position: 'relative', background: 'white', color: 'black', padding: '10px', borderRadius: '4px' }}>
+                            {/* HTML Preview */}
+                            <div
+                                className={`receipt-preview receipt-preview-${settings.printWidth}`}
+                                style={{ fontFamily: '"Courier New", Courier, monospace', fontSize: '12px' }}
+                                dangerouslySetInnerHTML={{ __html: previewReceipt() }}
+                            />
                             {/* Paper Tear Effect Bottom */}
                             <div style={{
                                 position: 'absolute',

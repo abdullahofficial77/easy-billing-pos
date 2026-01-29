@@ -8,28 +8,31 @@ export default function PinLock({ onUnlock }) {
 
     useEffect(() => {
         if (pin.length === 4) {
-            handleVerify();
+            handleVerify(pin);
         }
     }, [pin]);
 
     // Keyboard support - type numbers or use backspace
     useEffect(() => {
         const handleKeyDown = (e) => {
-            if (e.key >= '0' && e.key <= '9') {
-                if (pin.length < 4) {
-                    setPin(prev => prev + e.key);
-                }
-            } else if (e.key === 'Backspace') {
+            const key = e.key;
+            if (/^\d$/.test(key)) {
+                setPin(prev => {
+                    if (prev.length < 4) return prev + key;
+                    return prev;
+                });
+            } else if (key === 'Backspace') {
                 setPin(prev => prev.slice(0, -1));
             }
         };
 
         window.addEventListener('keydown', handleKeyDown);
         return () => window.removeEventListener('keydown', handleKeyDown);
-    }, [pin]);
+    }, []);
 
-    const handleVerify = async () => {
-        const valid = await verifyPIN(pin);
+    const handleVerify = async (currentPin) => {
+        const valid = await verifyPIN(currentPin);
+
         if (valid) {
             onUnlock();
         } else {

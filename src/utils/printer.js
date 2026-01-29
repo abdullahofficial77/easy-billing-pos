@@ -1,14 +1,7 @@
 import { formatCurrency } from './formatters';
 
-// Unicode directional marks to fix RTL/LTR mixing
-const LTR = '\u200E'; // Left-to-Right mark
-
 export const generateReceiptText = (bill, settings, width = '58mm', itemLayout = 'table', labels = {}, options = {}) => {
-    const is58mm = width === '58mm';
-    const lineLength = is58mm ? 32 : 48;
-    const divider = '-'.repeat(lineLength);
-
-    // Default labels
+    // Labels
     const l = {
         customer: labels.customer || 'Customer',
         date: labels.date || 'Date',
@@ -23,164 +16,130 @@ export const generateReceiptText = (bill, settings, width = '58mm', itemLayout =
         footerBranding: labels.footerBranding || ''
     };
 
-    let lines = [];
+    let html = '';
 
-    // Helper functions
-    const center = (str) => {
-        // Use Math.round to favor 1 space padding for odd-length near-full strings (e.g. 31/32)
-        const padding = Math.max(0, Math.round((lineLength - str.length) / 2));
-        return ' '.repeat(padding) + str;
-    };
+    // Styles handled in printReceipt, here we just structure content
+    const centerStyle = 'text-align: center;';
+    const leftStyle = 'text-align: left;';
+    const rightStyle = 'text-align: right;';
+    const rowStyle = 'display: flex; justify-content: space-between; margin-bottom: 2px;';
 
-    const leftRight = (left, right) => {
-        const space = Math.max(1, lineLength - left.length - right.length);
-        return left + ' '.repeat(space) + right;
-    };
+    // 1. Header Sections
+    // Shop Info
+    if ((!options.sections?.shopInfo || options.sections.shopInfo.enabled)) {
+        if (settings.storeName) html += `<div style="${centerStyle} font-weight: bold; font-size: 1.1em;">${settings.storeName}</div>`;
+        if (settings.address) html += `<div style="${centerStyle}">${settings.address}</div>`;
+    }
+    // Phone
+    if ((!options.sections?.phone || options.sections.phone.enabled) && settings.phone) {
+        html += `<div style="${centerStyle}">${settings.phone}</div>`;
+    }
 
-    const threeCol = (c1, c2, c3) => {
-        // Items: 60%, Qty: 20%, Total: 20%
-        const col1Width = Math.floor(lineLength * 0.60);
-        const col2Width = Math.floor(lineLength * 0.20);
-        const col3Width = lineLength - col1Width - col2Width;
+    html += '<div style="margin-bottom: 8px;"></div>'; // Spacer
 
-        // Truncate and pad columns for alignment
-        const col1 = c1.substring(0, col1Width).padEnd(col1Width);
-        const col2 = c2.substring(0, col2Width).padEnd(col2Width);
-        const col3 = c3.padStart(col3Width);
+    // Customer & Date
+    if (!options.sections?.customerName || options.sections.customerName.enabled) {
+        if (bill.customerName) html += `<div style="${leftStyle}"><b>${l.customer}:</b> ${bill.customerName}</div>`;
+    }
+    if (!options.sections?.dateTime || options.sections.dateTime.enabled) {
+        const dateStr = bill.date ? new Date(bill.date).toLocaleString() : new Date().toLocaleString();
+        html += `<div style="${leftStyle}"><b>${l.date}:</b> ${dateStr}</div>`;
+        html += '<div style="margin-bottom: 6px;"></div>'; // Line space
+    }
 
-        // Wrap in LTR mark to prevent RTL reordering
-        return LTR + col1 + col2 + col3;
-    };
+    // Bill # & Total Items (Merged if possible like before, or separate lines)
+    // Using simple divs
+    // Bill # & Total Items (Merged)
+    const showBillNo = !options.sections?.billNumber || options.sections.billNumber.enabled;
+    const showItemsCount = !options.sections?.totalItemsCount || options.sections.totalItemsCount.enabled;
 
-    // Section Renderers
-    const renderers = {
-        shopInfo: () => {
-            // Basic Shop Details (Name + Address)
-            if (settings.storeName) lines.push(center(settings.storeName));
-            if (settings.address) lines.push(center(settings.address));
-        },
-        phone: () => {
-            // Separate Phone Section
-            if (settings.phone) {
-                lines.push(center(settings.phone));
-                lines.push(''); // Spacing after phone
-            }
-        },
-        customerName: () => {
-            if (bill.customerName) lines.push(`${l.customer}: ${bill.customerName}`);
-        },
-        dateTime: () => {
-            lines.push(`${l.date}: ${new Date(bill.date).toLocaleString()}`);
-            lines.push(''); // Line space after date
-        },
-        billNumber: () => {
-            lines.push(`${l.billNo}: ${bill.billNumber || bill.id}`);
-        },
-        totalItemsCount: () => {
-            lines.push(`${l.totalItems}: ${bill.items.length}`);
-        },
-        itemsTable: () => {
-            lines.push(divider);
-            if (itemLayout === 'table') {
-                lines.push(threeCol(l.item, l.qty, l.price));
-                lines.push(divider);
+    if (showBillNo || showItemsCount) {
+        let leftPart = '';
+        let rightPart = '';
 
-                bill.items.forEach(item => {
-                    const itemTotal = item.total || (item.price * item.quantity);
-                    const qtyStr = item.unitType === 'kg' ? `${item.quantity}kg` :
-                        item.unitType === 'gram' ? `${item.quantity}g` :
-                            `${item.quantity}pc`;
-                    lines.push(threeCol(item.name, qtyStr, String(itemTotal)));
-                });
-            } else if (itemLayout === '3line') {
-                lines.push(center('Items'));
-                lines.push(divider);
-
-                bill.items.forEach(item => {
-                    const itemTotal = formatCurrency(item.total || (item.price * item.quantity));
-                    const qtyStr = item.unitType === 'kg' ? `${item.quantity} kg` :
-                        item.unitType === 'gram' ? `${item.quantity} g` :
-                            `${item.quantity} pc`;
-
-                    lines.push(LTR + item.name);
-                    lines.push(LTR + `  Qty: ${qtyStr} x R.${item.price}`);
-                    lines.push(leftRight('  Total:', itemTotal));
-                    lines.push('');
-                });
-            } else {
-                bill.items.forEach(item => {
-                    const itemTotal = formatCurrency(item.total || (item.price * item.quantity));
-                    const qtyStr = item.unitType === 'kg' ? `${item.quantity} kg` :
-                        item.unitType === 'gram' ? `${item.quantity} g` :
-                            `${item.quantity} pc`;
-
-                    lines.push(LTR + item.name);
-                    lines.push(leftRight(`  ${qtyStr} x R.${item.price}`, itemTotal));
-                });
-            }
-            lines.push(divider);
-        },
-        totals: () => {
-            lines.push(leftRight(l.total + ':', 'R.' + bill.total));
-        },
-        discount: () => {
-            if (bill.discount > 0) {
-                lines.push(leftRight(l.discount + ':', 'R.' + bill.discount));
-            }
-        },
-        netTotal: () => {
-            lines.push(leftRight(l.netTotal + ':', 'R.' + (bill.finalTotal || (bill.total - bill.discount))));
-            lines.push(''); // Spacing after net total
-        },
-        footer: () => {
-            lines.push(''); // One line space
-            if (settings.footerText) {
-                // Ensure text is centered
-                lines.push(center(settings.footerText.trim()));
-            }
-            if (l.footerBranding) {
-                lines.push(center(l.footerBranding.trim()));
-            }
+        if (showBillNo) {
+            leftPart = `<b>${l.billNo}:</b> ${bill.billNumber || bill.id || '-'}`;
         }
-    };
-
-    // Execute renderers in order
-    // Updated default order to include separate Phone, Discount, NetTotal sections
-    const defaultOrder = ['shopInfo', 'phone', 'customerName', 'dateTime', 'billNumber', 'totalItemsCount', 'itemsTable', 'totals', 'discount', 'netTotal', 'footer'];
-    const order = options.order || defaultOrder;
-    const sections = options.sections || {};
-
-    for (let i = 0; i < order.length; i++) {
-        const key = order[i];
-
-        // Skip disabled sections
-        if (sections[key] && !sections[key].enabled) continue;
-
-        // Special Handling: Smart Merge for Bill Number + Total Items on same line
-        // If "Bill Number" is followed immediately by "Total Items Count", merge them.
-        if (key === 'billNumber') {
-            const nextKey = order[i + 1];
-            if (nextKey === 'totalItemsCount' && (!sections[nextKey] || sections[nextKey].enabled)) {
-
-                const billText = `${l.billNo}: ${bill.billNumber || bill.id}`;
-                const itemsText = `${l.totalItems}: ${bill.items.length}`;
-                lines.push(leftRight(billText, itemsText));
-
-                i++; // Skip separate rendering of Total Items
-                continue;
-            }
+        if (showItemsCount) {
+            rightPart = `<b>${l.totalItems}:</b> ${bill.items ? bill.items.length : 0}`;
         }
 
-        // Execute standard renderer
-        if (renderers[key]) {
-            renderers[key]();
+        if (showBillNo && showItemsCount) {
+            html += `<div style="${rowStyle}"><span>${leftPart}</span><span>${rightPart}</span></div>`;
+        } else if (showBillNo) {
+            html += `<div style="${leftStyle}">${leftPart}</div>`;
+        } else if (showItemsCount) {
+            html += `<div style="${rightStyle}">${rightPart}</div>`;
         }
     }
 
-    return lines.join('\n');
+    html += '<hr style="border-top: 1px dashed black; margin: 4px 0;">';
+
+    // 2. Items Table
+    if (!options.sections?.itemsTable || options.sections.itemsTable.enabled) {
+        html += `<table style="width: 100%; border-collapse: collapse; font-size: 0.9em;">
+            <thead>
+                <tr style="">
+                    <th style="${leftStyle} width: 45%; padding-bottom: 4px;">${l.item}</th>
+                    <th style="${centerStyle} width: 25%; padding-bottom: 4px;">${l.qty}</th>
+                    <th style="${rightStyle} width: 30%; padding-bottom: 4px;">${l.price}</th>
+                </tr>
+            </thead>
+            <tbody>`;
+
+        if (bill.items) {
+            bill.items.forEach(item => {
+                const itemTotal = item.total || (item.price * item.quantity);
+                const qtyStr = item.unitType === 'kg' ? `${item.quantity}kg` :
+                    item.unitType === 'gram' ? `${item.quantity}g` :
+                        `${item.quantity}`;
+
+                html += `<tr>
+                    <td style="${leftStyle} padding: 2px 0;">${item.name}</td>
+                    <td style="${centerStyle} padding: 2px 0;">${qtyStr}</td>
+                    <td style="${rightStyle} padding: 2px 0;">${itemTotal}</td>
+                </tr>`;
+            });
+        }
+        html += `</tbody></table>`;
+        html += '<hr style="border-top: 1px dashed black; margin: 4px 0 8px 0;">';
+    }
+
+    // 3. Totals
+    if (!options.sections?.totals || options.sections.totals.enabled) {
+        const total = bill.total !== undefined ? bill.total : bill.totalAmount;
+        html += `<div style="${rowStyle}"><b>${l.total}:</b> <span>${formatCurrency(total || 0).replace('Rs ', '')}</span></div>`;
+    }
+    if ((!options.sections?.discount || options.sections.discount.enabled) && bill.discount > 0) {
+        html += `<div style="${rowStyle}"><span>${l.discount}:</span> <span>${formatCurrency(bill.discount).replace('Rs ', '')}</span></div>`;
+    }
+
+    // Net Total
+    if (!options.sections?.netTotal || options.sections.netTotal.enabled) {
+        const total = bill.total !== undefined ? bill.total : bill.totalAmount;
+        const final = bill.finalTotal !== undefined ? bill.finalTotal : (bill.remainingAmount !== undefined ? (total - bill.discount) : total);
+        const displayTotal = final || (total - (bill.discount || 0)) || 0;
+
+        html += `<div style="${rowStyle} font-weight: bold; font-size: 1.1em; margin-top: 4px;">
+            <span>${l.netTotal}:</span> <span>${formatCurrency(displayTotal).replace('Rs ', '')}</span>
+        </div>`;
+    }
+
+    // 4. Footer
+    if (!options.sections?.footer || options.sections.footer.enabled) {
+        html += '<br>';
+        if (settings.footerText) {
+            html += `<div style="${centerStyle} font-size: 0.9em;">${settings.footerText}</div>`;
+        }
+        if (l.footerBranding) {
+            html += `<div style="${centerStyle} font-size: 0.7em; margin-top: 8px; opacity: 0.7;">${l.footerBranding}</div>`;
+        }
+    }
+
+    return html;
 };
 
-export const printReceipt = (content) => {
+export const printReceipt = (content, width = '58mm') => {
     return new Promise((resolve) => {
         // Create a hidden iframe
         let iframe = document.createElement('iframe');
@@ -192,10 +151,10 @@ export const printReceipt = (content) => {
         iframe.style.width = '1px';
         iframe.style.height = '1px';
         iframe.style.border = '0';
-        iframe.style.opacity = '0';
-        iframe.style.pointerEvents = 'none';
-        iframe.style.zIndex = '-9999';
         document.body.appendChild(iframe);
+
+        // Ensure width is a valid CSS string
+        const cssWidth = width.includes('mm') ? width : `${width}mm`;
 
         // Write content to iframe
         const doc = iframe.contentWindow.document;
@@ -206,21 +165,25 @@ export const printReceipt = (content) => {
             <head>
                 <title>Receipt</title>
                 <style>
-                    @page { margin: 0; size: auto; }
+                    @page { margin: 0; size: ${cssWidth} auto; }
                     body {
                         font-family: 'Courier New', Courier, monospace;
                         font-size: 12px;
                         line-height: 1.2;
-                        padding: 0;
-                        margin: 5px;
-                        white-space: pre;
-                        direction: ltr;
-                        width: 100%;
+                        padding: 0 2mm;
+                        margin: 0;
                         color: black;
+                        background: white;
+                        width: ${cssWidth};
+                        max-width: ${cssWidth};
+                    }
+                    table { width: 100%; table-layout: fixed; }
+                    /* Force content to fit */
+                    * {
+                        box-sizing: border-box;
                     }
                     @media print {
-                        body { padding: 0; margin: 0; }
-                        html, body { height: auto; }
+                        body { margin: 0; padding: 0 2mm; }
                     }
                 </style>
             </head>
@@ -230,7 +193,6 @@ export const printReceipt = (content) => {
         doc.close();
 
         // Print and cleanup
-        // Wait for content to load properly
         iframe.onload = () => {
             iframe.contentWindow.focus();
             setTimeout(() => {
@@ -241,17 +203,15 @@ export const printReceipt = (content) => {
                 } finally {
                     resolve();
                     // Remove iframe after a longer delay to ensure print dialog is done
-                    // Removing it too early causes the freeze/crash on Android WebView
                     setTimeout(() => {
                         if (document.body.contains(iframe)) {
                             document.body.removeChild(iframe);
                         }
-                    }, 5000); // Increased to 5 seconds
+                    }, 5000);
                 }
             }, 500);
         };
 
-        // Fallback if onload doesn't fire immediately (e.g. strict CSP or race condition)
         if (iframe.contentDocument.readyState === 'complete') {
             iframe.onload();
         }

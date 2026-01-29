@@ -1,6 +1,6 @@
 // Format currency (PKR)
 export function formatCurrency(amount) {
-    return `R.${Number(amount).toLocaleString('en-PK', {
+    return `Rs.${Number(amount).toLocaleString('en-PK', {
         minimumFractionDigits: 0,
         maximumFractionDigits: 2
     })}`;

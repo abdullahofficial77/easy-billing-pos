@@ -147,15 +147,18 @@ export default function NewBill() {
     };
 
     const updateQuantity = (itemId, newQty) => {
-        if (newQty < 0.05) return; // Allow chitang (0.0625)
+        if (newQty < 0) return; // Prevent negative values
+        if (newQty < 0.05 && newQty !== 0) return; // Allow 0 or chitang (0.0625) but not tiny positive spam
         setBillItems(billItems.map(item =>
             item.id === itemId ? { ...item, quantity: newQty } : item
         ));
     };
 
     const updatePrice = (itemId, newPrice) => {
+        const parsed = parseFloat(newPrice);
+        if (parsed < 0) return; // Prevent negative values
         setBillItems(billItems.map(item =>
-            item.id === itemId ? { ...item, overridePrice: parseFloat(newPrice) || null } : item
+            item.id === itemId ? { ...item, overridePrice: isNaN(parsed) ? null : parsed } : item
         ));
     };
 
@@ -512,8 +515,8 @@ export default function NewBill() {
 
             {/* Totals Bar - Compact Grid */}
             <div className="bill-summary-bar" style={{
-                display: 'grid',
-                gridTemplateColumns: 'repeat(2, 1fr)',
+                display: 'flex',
+                flexWrap: 'wrap',
                 gap: '8px',
                 padding: '10px 12px',
                 background: 'var(--color-bg-card)',
@@ -522,17 +525,17 @@ export default function NewBill() {
                 fontSize: '0.85rem'
             }
             }>
-                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', flex: '1 1 40%', minWidth: '160px' }}>
                     <span className="text-muted">Total</span>
                     <span className="font-bold text-success">{formatCurrency(totalAmount)}</span>
                 </div>
                 <div
                     onClick={() => document.getElementById('paid-amount-input').focus()}
-                    style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                    style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', flex: '1 1 40%', minWidth: '160px' }}>
                     <span className="text-muted">Items</span>
                     <span className="font-bold">{billItems.length}</span>
                 </div>
-                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', flex: '1 1 40%', minWidth: '160px' }}>
                     <span className="text-muted">Remaining</span>
                     <span className={`font-bold ${remainingAmount > 0 ? 'text-warning' : ''}`}>{formatCurrency(remainingAmount)}</span>
                 </div>
@@ -546,7 +549,9 @@ export default function NewBill() {
                         border: '1px solid var(--color-border)',
                         borderRadius: 'var(--radius-sm)',
                         padding: '4px 8px',
-                        cursor: 'text'
+                        cursor: 'text',
+                        flex: '1 1 40%',
+                        minWidth: '160px'
                     }}
                 >
                     <span className="text-muted">Paid</span>
@@ -850,14 +855,17 @@ export default function NewBill() {
                                                 type="number"
                                                 className="qty-value"
                                                 value={item.quantity}
-                                                onChange={(e) => updateQuantity(item.id, parseFloat(e.target.value) || 1)}
-                                                min="0.0625"
+                                                onChange={(e) => {
+                                                    const val = parseFloat(e.target.value);
+                                                    if (val >= 0) updateQuantity(item.id, val);
+                                                }}
+                                                min="0"
                                                 step={item.unitType === 'kg' ? '0.25' : '1'}
                                                 style={{
                                                     background: 'transparent',
                                                     border: 'none',
                                                     color: 'inherit',
-                                                    width: '60px',
+                                                    width: '35px',
                                                     textAlign: 'center'
                                                 }}
                                             />
@@ -898,14 +906,16 @@ export default function NewBill() {
                                                 placeholder="Override"
                                                 value={item.overridePrice ?? ''}
                                                 onChange={(e) => updatePrice(item.id, e.target.value)}
+                                                min="0"
                                                 style={{
-                                                    width: '70px',
+                                                    width: '65px', // Reduced from 75px
                                                     padding: '6px',
                                                     background: 'var(--color-bg-secondary)',
                                                     border: '1px solid var(--color-border)',
                                                     borderRadius: '6px',
                                                     color: 'inherit',
-                                                    fontSize: '0.875rem'
+                                                    fontSize: '0.9rem', // Slightly larger font
+                                                    textAlign: 'right' // Align numbers to right is standard for currency
                                                 }}
                                             />
                                             <span className="bill-item-total">{formatCurrency(itemTotal)}</span>

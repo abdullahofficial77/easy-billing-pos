@@ -60,24 +60,24 @@ export default function App() {
         );
     }
 
-    if (isLocked) {
-        return <PinLock onUnlock={() => setIsLocked(false)} />;
-    }
-
     return (
         <ThemeProvider>
-            <BrowserRouter>
-                <AppShell>
-                    <Routes>
-                        <Route path="/" element={<NewBill />} />
-                        <Route path="/drafts" element={<Drafts />} />
-                        <Route path="/records" element={<Records />} />
-                        <Route path="/items" element={<AllItems />} />
-                        <Route path="/categories" element={<Categories />} />
-                        <Route path="/settings" element={<Settings />} />
-                    </Routes>
-                </AppShell>
-            </BrowserRouter>
+            {isLocked ? (
+                <PinLock onUnlock={() => setIsLocked(false)} />
+            ) : (
+                <BrowserRouter>
+                    <AppShell>
+                        <Routes>
+                            <Route path="/" element={<NewBill />} />
+                            <Route path="/drafts" element={<Drafts />} />
+                            <Route path="/records" element={<Records />} />
+                            <Route path="/items" element={<AllItems />} />
+                            <Route path="/categories" element={<Categories />} />
+                            <Route path="/settings" element={<Settings />} />
+                        </Routes>
+                    </AppShell>
+                </BrowserRouter>
+            )}
         </ThemeProvider>
     );
 }

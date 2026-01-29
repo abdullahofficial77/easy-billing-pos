@@ -65,8 +65,9 @@ export default function Records() {
 
     const handlePrint = () => {
         if (selectedBill) {
-            const receiptText = generateReceiptText(selectedBill, settings, settings.printerSize || '58');
-            printReceipt(receiptText);
+            const width = settings.printWidth || '58mm';
+            const receiptText = generateReceiptText(selectedBill, settings, width);
+            printReceipt(receiptText, width);
         }
     };
 
@@ -234,15 +235,28 @@ export default function Records() {
                         </div>
 
                         <div className="mb-md">
-                            <h4 className="mb-sm">Items</h4>
-                            {selectedBill.items.map((item, idx) => (
-                                <div key={idx} className="flex justify-between mb-sm" style={{ fontSize: '0.875rem' }}>
-                                    <span>
-                                        {item.name} × {item.quantity}{formatUnitShort(item.unitType, item.customUnit)}
-                                    </span>
-                                    <span>{formatCurrency((item.overridePrice ?? item.price) * item.quantity)}</span>
-                                </div>
-                            ))}
+                            <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: '0.875rem' }}>
+                                <thead>
+                                    <tr style={{ borderBottom: '1px dashed var(--color-border)' }}>
+                                        <th style={{ textAlign: 'left', padding: '4px 0', width: '45%' }}>Items</th>
+                                        <th style={{ textAlign: 'center', padding: '4px 0', width: '25%' }}>Qty</th>
+                                        <th style={{ textAlign: 'right', padding: '4px 0', width: '30%' }}>Price</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {selectedBill.items.map((item, idx) => (
+                                        <tr key={idx}>
+                                            <td style={{ textAlign: 'left', padding: '4px 0' }}>{item.name}</td>
+                                            <td style={{ textAlign: 'center', padding: '4px 0' }}>
+                                                {item.quantity}{formatUnitShort(item.unitType, item.customUnit)}
+                                            </td>
+                                            <td style={{ textAlign: 'right', padding: '4px 0' }}>
+                                                {formatCurrency((item.overridePrice ?? item.price) * item.quantity)}
+                                            </td>
+                                        </tr>
+                                    ))}
+                                </tbody>
+                            </table>
                         </div>
 
                         <div style={{ borderTop: '1px solid var(--color-border)', paddingTop: '12px' }}>
