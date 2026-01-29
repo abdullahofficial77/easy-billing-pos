@@ -140,83 +140,82 @@ export const generateReceiptText = (bill, settings, width = '58mm', itemLayout =
 };
 
 export const printReceipt = (content, width = '58mm') => {
-    return new Promise((resolve) => {
-        // Create a hidden iframe
-        let iframe = document.createElement('iframe');
-        iframe.style.position = 'fixed';
-        // Make it "visible" but transparent for Android WebView compatibility
-        // Off-screen iframes (-10000px) often fail to trigger print dialog on Android, freezing the app
-        iframe.style.top = '0';
-        iframe.style.left = '0';
-        iframe.style.width = '1px';
-        iframe.style.height = '1px';
-        iframe.style.opacity = '0.01'; // Not 0, just in case
-        iframe.style.pointerEvents = 'none';
-        iframe.style.zIndex = '-1000'; // Behind everything but exists in viewport
-        iframe.style.border = '0';
-        document.body.appendChild(iframe);
+    return new Promise((resolve, reject) => {
+        try {
+            // 1. Create the overlay container
+            const overlayId = 'receipt-print-overlay';
+            const styleId = 'receipt-print-style';
 
-        // Ensure width is a valid CSS string
-        const cssWidth = width.includes('mm') ? width : `${width}mm`;
+            // Cleanup existing if any
+            const existingOverlay = document.getElementById(overlayId);
+            const existingStyle = document.getElementById(styleId);
+            if (existingOverlay) existingOverlay.remove();
+            if (existingStyle) existingStyle.remove();
 
-        // Write content to iframe
-        const doc = iframe.contentWindow.document;
-        doc.open();
-        doc.write(`
-            <!DOCTYPE html>
-            <html>
-            <head>
-                <title>Receipt</title>
-                <style>
-                    @page { margin: 0; size: ${cssWidth} auto; }
-                    body {
+            // 2. Create Print Styles
+            const cssWidth = width.includes('mm') ? width : `${width}mm`;
+            const style = document.createElement('style');
+            style.id = styleId;
+            style.innerHTML = `
+                @media print {
+                    body > *:not(#${overlayId}) {
+                        display: none !important;
+                    }
+                    #${overlayId} {
+                        display: block !important;
+                        position: absolute;
+                        left: 0;
+                        top: 0;
+                        width: ${cssWidth};
+                        margin: 0;
+                        padding: 0;
+                        background: white;
                         font-family: 'Courier New', Courier, monospace;
                         font-size: 12px;
-                        line-height: 1.2;
-                        padding: 0 2mm;
+                    }
+                    @page {
+                        size: ${cssWidth} auto;
                         margin: 0;
-                        color: black;
-                        background: white;
-                        width: ${cssWidth};
-                        max-width: ${cssWidth};
                     }
-                    table { width: 100%; table-layout: fixed; }
-                    /* Force content to fit */
-                    * {
-                        box-sizing: border-box;
-                    }
-                    @media print {
-                        body { margin: 0; padding: 0 2mm; }
-                    }
-                </style>
-            </head>
-            <body>${content}</body>
-            </html>
-        `);
-        doc.close();
-
-        // Print and cleanup
-        iframe.onload = () => {
-            iframe.contentWindow.focus();
-            setTimeout(() => {
-                try {
-                    iframe.contentWindow.print();
-                } catch (e) {
-                    console.error('Printing failed', e);
-                } finally {
-                    resolve();
-                    // Remove iframe after a longer delay to ensure print dialog is done
-                    setTimeout(() => {
-                        if (document.body.contains(iframe)) {
-                            document.body.removeChild(iframe);
-                        }
-                    }, 5000);
                 }
-            }, 500);
-        };
+                @media screen {
+                    #${overlayId} {
+                        display: none; /* Hide on screen */
+                    }
+                }
+            `;
+            document.head.appendChild(style);
 
-        if (iframe.contentDocument.readyState === 'complete') {
-            iframe.onload();
+            // 3. Create Receipt Content Overlay
+            const overlay = document.createElement('div');
+            overlay.id = overlayId;
+            overlay.innerHTML = content;
+            document.body.appendChild(overlay);
+
+            // 4. Trigger Print
+            // Small delay to ensure DOM is updated
+            setTimeout(() => {
+                window.print();
+
+                // 5. Cleanup (after print dialog closes)
+                // Note: onafterprint support varies, so we use a generous timeout as fallback 
+                // or just leave it hidden (display: none on screen)
+
+                // We resolve immediately because window.print() blocks on some browsers but not others
+                resolve();
+
+                // Optional: Cleanup after delay
+                setTimeout(() => {
+                    // We don't remove it immediately to ensure mobile browsers catch it
+                    // But we can remove the style and div eventually
+                    // document.head.removeChild(style);
+                    // document.body.removeChild(overlay);
+                }, 2000);
+            }, 100);
+
+        } catch (e) {
+            console.error('Print error:', e);
+            reject(e);
         }
     });
 };
