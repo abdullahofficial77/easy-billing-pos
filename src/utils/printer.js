@@ -113,40 +113,39 @@ export const generateReceiptText = (bill, settings, width = '58mm', itemLayout =
         html += `</tbody></table>`;
         html += '<hr class="separator-line" style="border-top: 1px dashed black; margin: 2px 0 6px 0;">';
     }
-}
 
-// 3. Totals
-if (!options.sections?.totals || options.sections.totals.enabled) {
-    const total = bill.total !== undefined ? bill.total : bill.totalAmount;
-    html += `<div style="${rowStyle}"><b>${l.total}:</b> <span>${formatCurrency(total || 0).replace('Rs ', '')}</span></div>`;
-}
-if ((!options.sections?.discount || options.sections.discount.enabled) && bill.discount > 0) {
-    html += `<div style="${rowStyle}"><span>${l.discount}:</span> <span>${formatCurrency(bill.discount).replace('Rs ', '')}</span></div>`;
-}
+    // 3. Totals
+    if (!options.sections?.totals || options.sections.totals.enabled) {
+        const total = bill.total !== undefined ? bill.total : bill.totalAmount;
+        html += `<div style="${rowStyle}"><b>${l.total}:</b> <span>${formatCurrency(total || 0).replace('Rs ', '')}</span></div>`;
+    }
+    if ((!options.sections?.discount || options.sections.discount.enabled) && bill.discount > 0) {
+        html += `<div style="${rowStyle}"><span>${l.discount}:</span> <span>${formatCurrency(bill.discount).replace('Rs ', '')}</span></div>`;
+    }
 
-// Net Total
-if (!options.sections?.netTotal || options.sections.netTotal.enabled) {
-    const total = bill.total !== undefined ? bill.total : bill.totalAmount;
-    const final = bill.finalTotal !== undefined ? bill.finalTotal : (bill.remainingAmount !== undefined ? (total - bill.discount) : total);
-    const displayTotal = final || (total - (bill.discount || 0)) || 0;
+    // Net Total
+    if (!options.sections?.netTotal || options.sections.netTotal.enabled) {
+        const total = bill.total !== undefined ? bill.total : bill.totalAmount;
+        const final = bill.finalTotal !== undefined ? bill.finalTotal : (bill.remainingAmount !== undefined ? (total - bill.discount) : total);
+        const displayTotal = final || (total - (bill.discount || 0)) || 0;
 
-    html += `<div style="${rowStyle} font-weight: bold; font-size: 1.1em; margin-top: 4px;">
+        html += `<div style="${rowStyle} font-weight: bold; font-size: 1.1em; margin-top: 4px;">
             <span>${l.netTotal}:</span> <span>${formatCurrency(displayTotal).replace('Rs ', '')}</span>
         </div>`;
-}
-
-// 4. Footer
-if (!options.sections?.footer || options.sections.footer.enabled) {
-    html += '<br>';
-    if (settings.footerText) {
-        html += `<div style="${centerStyle} font-size: 0.9em;">${settings.footerText}</div>`;
     }
-    if (l.footerBranding) {
-        html += `<div style="${centerStyle} font-size: 0.7em; margin-top: 8px; opacity: 0.7;">${l.footerBranding}</div>`;
-    }
-}
 
-return html;
+    // 4. Footer
+    if (!options.sections?.footer || options.sections.footer.enabled) {
+        html += '<br>';
+        if (settings.footerText) {
+            html += `<div style="${centerStyle} font-size: 0.9em;">${settings.footerText}</div>`;
+        }
+        if (l.footerBranding) {
+            html += `<div style="${centerStyle} font-size: 0.7em; margin-top: 8px; opacity: 0.7;">${l.footerBranding}</div>`;
+        }
+    }
+
+    return html;
 };
 
 export const printReceipt = (content, width = '58mm') => {
