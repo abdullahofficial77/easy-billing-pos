@@ -1897,8 +1897,9 @@ h4 {
     /* Safe Area for Mobile Status Bar */
     padding-top: max(12px, env(safe-area-inset-top));
     /* The bottom padding is handled by the flex container inside, or minimal here */
-    padding-bottom: 4px;
-    margin-bottom: 0;
+    padding-bottom: 8px;
+    margin-bottom: 16px;
+    /* Added spacing below header for aesthetics */
     border-bottom: 1px solid var(--color-border-light);
 }
 
