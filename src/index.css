@@ -1884,3 +1884,47 @@ h4 {
         /* Reclaim footer space */
     }
 }
+
+/* ===================================
+   Header & Spacing Fixes - REVISED
+   =================================== */
+
+.sticky-header {
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    background: var(--color-bg-primary);
+    /* Safe Area for Mobile Status Bar */
+    padding-top: max(12px, env(safe-area-inset-top));
+    /* The bottom padding is handled by the flex container inside, or minimal here */
+    padding-bottom: 4px;
+    margin-bottom: 0;
+    border-bottom: 1px solid var(--color-border-light);
+}
+
+.page-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 8px var(--spacing-md);
+    position: relative;
+}
+
+/* Ensure button behaves normally in flex container */
+.page-header .btn {
+    position: static !important;
+    transform: none !important;
+    margin: 0;
+}
+
+.page-header h1 {
+    font-size: 1.5rem;
+    line-height: 1.2;
+    margin: 0;
+}
+
+.page-subtitle {
+    font-size: 0.875rem;
+    color: var(--color-text-secondary);
+    margin: 0;
+}
