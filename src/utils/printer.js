@@ -173,10 +173,18 @@ export const printReceipt = (content, width = '58mm') => {
                         top: 0;
                         width: ${cssWidth};
                         margin: 0;
-                        padding: 0;
+                        padding: 0 5mm; /* Fixed horizontal spacing */
+                        box-sizing: border-box; /* Include padding in width */
                         background: white;
                         font-family: 'Courier New', Courier, monospace;
                         font-size: 12px;
+                        color: #000000 !important;
+                    }
+                    /* Enforce strict styling on all children */
+                    #${overlayId} * {
+                        color: #000000 !important; /* All colors same (black) */
+                        font-weight: normal !important; /* No bold */
+                        opacity: 1 !important; /* No grey/transparent */
                     }
                     @page {
                         size: ${cssWidth} auto;
@@ -185,7 +193,7 @@ export const printReceipt = (content, width = '58mm') => {
                 }
                 @media screen {
                     #${overlayId} {
-                        display: none; /* Hide on screen */
+                        display: none; 
                     }
                 }
             `;
