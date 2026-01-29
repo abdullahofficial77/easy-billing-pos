@@ -75,21 +75,22 @@ export const generateReceiptText = (bill, settings, width = '58mm', itemLayout =
 
 
     // Top Line (Before Headings) - Reverted to simple style but with 0 margin
-    // Top Line (Before Headings) - Standardized consistent style
-    html += '<hr style="border: 0; border-top: 1px dashed black; margin: 0; width: 100%; height: 0;">';
+
+    // Top Line (Before Headings) - Enforcing Pitch Black #000000
+    html += '<hr style="border: 0; border-top: 1px dashed #000000; margin: 0; width: 100%; height: 0; opacity: 1;">';
 
     // 2. Items Table
     if (!options.sections?.itemsTable || options.sections.itemsTable.enabled) {
         html += `<table style="width: 100%; border-collapse: collapse; font-size: 0.9em;">
             <thead>
                 <tr style="">
-                    <th style="${leftStyle} width: 45%; padding-bottom: 0px; font-weight: normal; padding-top: 2px;">${l.item}</th>
-                    <th style="${centerStyle} width: 25%; padding-bottom: 0px; font-weight: normal; padding-top: 2px;">${l.qty}</th>
-                    <th style="${rightStyle} width: 30%; padding-bottom: 0px; font-weight: normal; padding-top: 2px;">${l.price}</th>
+                    <th style="${leftStyle} width: 45%; padding-bottom: 0px; font-weight: normal; padding-top: 0; color: #000000;">${l.item}</th>
+                    <th style="${centerStyle} width: 25%; padding-bottom: 0px; font-weight: normal; padding-top: 0; color: #000000;">${l.qty}</th>
+                    <th style="${rightStyle} width: 30%; padding-bottom: 0px; font-weight: normal; padding-top: 0; color: #000000;">${l.price}</th>
                 </tr>
                 <tr>
                     <td colspan="3" style="padding: 0; line-height: 0; height: 0;">
-                        <hr style="border: 0; border-top: 1px dashed black; margin: 0; width: 100%; height: 0;">
+                        <hr style="border: 0; border-top: 1px dashed #000000; margin: 0; width: 100%; height: 0; opacity: 1;">
                     </td>
                 </tr>
             </thead>
@@ -110,8 +111,8 @@ export const generateReceiptText = (bill, settings, width = '58mm', itemLayout =
             });
         }
         html += `</tbody></table>`;
-        // Bottom Line (After Items) - Standardized consistent style
-        html += '<hr style="border: 0; border-top: 1px dashed black; margin: 0 0 6px 0; width: 100%; height: 0;">';
+        // Bottom Line (After Items) - Enforcing Pitch Black #000000
+        html += '<hr style="border: 0; border-top: 1px dashed #000000; margin: 0 0 6px 0; width: 100%; height: 0; opacity: 1;">';
     }
 
     // 3. Totals
