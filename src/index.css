@@ -1894,8 +1894,8 @@ h4 {
     top: 0;
     z-index: 100;
     background: var(--color-bg-primary);
-    /* Safe Area for Mobile Status Bar */
-    padding-top: max(12px, env(safe-area-inset-top));
+    /* Safe Area for Mobile Status Bar - Increased base to 32px to safely clear notches */
+    padding-top: max(32px, env(safe-area-inset-top));
     /* The bottom padding is handled by the flex container inside, or minimal here */
     padding-bottom: 8px;
     margin-bottom: 16px;
