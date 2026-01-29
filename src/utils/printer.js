@@ -73,7 +73,7 @@ export const generateReceiptText = (bill, settings, width = '58mm', itemLayout =
         }
     }
 
-    html += '<hr style="border-top: 1px dashed black; margin: 4px 0;">';
+    html += '<hr style="border-top: 1px dashed black; margin: 2px 0;">';
 
     // 2. Items Table
     if (!options.sections?.itemsTable || options.sections.itemsTable.enabled) {
@@ -85,10 +85,9 @@ export const generateReceiptText = (bill, settings, width = '58mm', itemLayout =
                     <th style="${rightStyle} width: 30%; padding-bottom: 2px; font-weight: normal;">${l.price}</th>
                 </tr>
                 <tr>
-                    <td colspan="3" style="padding: 0;">
-                        <hr style="border-top: 1px dashed black; margin: 2px 0;">
+                    <td colspan="3" style="padding: 0; line-height: 2px;">
+                        <hr style="border-top: 1px dashed black; margin: 2px 0 2px 0;">
                     </td>
-                </tr>
                 </tr>
             </thead>
             <tbody>`;
@@ -108,7 +107,7 @@ export const generateReceiptText = (bill, settings, width = '58mm', itemLayout =
             });
         }
         html += `</tbody></table>`;
-        html += '<hr style="border-top: 1px dashed black; margin: 4px 0 8px 0;">';
+        html += '<hr style="border-top: 1px dashed black; margin: 2px 0 6px 0;">';
     }
 
     // 3. Totals
