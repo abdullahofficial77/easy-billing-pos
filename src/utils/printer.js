@@ -77,20 +77,20 @@ export const generateReceiptText = (bill, settings, width = '58mm', itemLayout =
     // Top Line (Before Headings) - Reverted to simple style but with 0 margin
 
     // Top Line (Before Headings)
-    html += '<hr style="border-top: 1px dashed black; margin: 2px 0;">';
+    html += '<hr style="border-top: 1px dashed black; margin: 0;">';
 
     // 2. Items Table
     if (!options.sections?.itemsTable || options.sections.itemsTable.enabled) {
         html += `<table style="width: 100%; border-collapse: collapse; font-size: 0.9em;">
             <thead>
                 <tr style="">
-                    <th style="${leftStyle} width: 45%; padding-bottom: 2px; font-weight: normal;">${l.item}</th>
-                    <th style="${centerStyle} width: 25%; padding-bottom: 2px; font-weight: normal;">${l.qty}</th>
-                    <th style="${rightStyle} width: 30%; padding-bottom: 2px; font-weight: normal;">${l.price}</th>
+                    <th style="${leftStyle} width: 45%; padding-bottom: 0; font-weight: normal;">${l.item}</th>
+                    <th style="${centerStyle} width: 25%; padding-bottom: 0; font-weight: normal;">${l.qty}</th>
+                    <th style="${rightStyle} width: 30%; padding-bottom: 0; font-weight: normal;">${l.price}</th>
                 </tr>
                 <tr>
-                    <td colspan="3" style="padding: 0; line-height: 2px;">
-                        <hr style="border-top: 1px dashed black; margin: 2px 0 2px 0;">
+                    <td colspan="3" style="padding: 0; line-height: 0;">
+                        <hr style="border-top: 1px dashed black; margin: 0;">
                     </td>
                 </tr>
             </thead>
@@ -104,14 +104,14 @@ export const generateReceiptText = (bill, settings, width = '58mm', itemLayout =
                         `${item.quantity}`;
 
                 html += `<tr>
-                    <td style="${leftStyle} padding: 2px 0;">${item.name}</td>
-                    <td style="${centerStyle} padding: 2px 0;">${qtyStr}</td>
-                    <td style="${rightStyle} padding: 2px 0;">${itemTotal}</td>
+                    <td style="${leftStyle} padding: 0;">${item.name}</td>
+                    <td style="${centerStyle} padding: 0;">${qtyStr}</td>
+                    <td style="${rightStyle} padding: 0;">${itemTotal}</td>
                 </tr>`;
             });
         }
         html += `</tbody></table>`;
-        html += '<hr style="border-top: 1px dashed black; margin: 2px 0 6px 0;">';
+        html += '<hr style="border-top: 1px dashed black; margin: 0 0 6px 0;">';
     }
 
     // 3. Totals
