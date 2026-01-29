@@ -87,8 +87,8 @@ export const generateReceiptText = (bill, settings, width = '58mm', itemLayout =
                     <th style="${rightStyle} width: 30%; padding-bottom: 2px; font-weight: normal;">${l.price}</th>
                 </tr>
                 <tr>
-                    <td colspan="3" style="padding: 0;">
-                        <hr class="separator-line" style="border-top: 1px dashed black; margin: 2px 0 2px 0;">
+                    <td colspan="3" style="padding: 0; line-height: 0;">
+                        <hr class="separator-line" style="border-top: 1px dashed black; margin: 2px 0;">
                     </td>
                 </tr>
             </thead>
