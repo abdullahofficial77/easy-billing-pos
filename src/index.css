@@ -87,11 +87,12 @@
     --color-bg-card: hsl(0 0% 100%);
     --color-bg-elevated: hsl(0 0% 100%);
 
-    /* Accent - Darker, Stronger for Light Mode */
-    --color-accent: hsl(260 85% 55%);
-    --color-accent-hover: hsl(260 90% 50%);
-    --color-accent-light: hsl(260 85% 55% / 0.1);
-    --color-accent-glow: hsl(260 85% 55% / 0.25);
+    /* Accent - Gold/Yellow for Light Mode */
+    --color-accent: hsl(45 100% 50%);
+    /* Bright Gold */
+    --color-accent-hover: hsl(45 100% 45%);
+    --color-accent-light: hsl(45 100% 50% / 0.15);
+    --color-accent-glow: hsl(45 100% 50% / 0.3);
 
     /* Semantic - Deep, Readable Colors */
     --color-success: hsl(150 80% 35%);
