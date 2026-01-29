@@ -23,6 +23,7 @@ export default function NewBill() {
     const [editingPayment, setEditingPayment] = useState(null);
     const [customItemModal, setCustomItemModal] = useState(false);
     const [customItemData, setCustomItemData] = useState({ name: '', price: '' });
+    const [customItemErrors, setCustomItemErrors] = useState({});
     const [activeDraftId, setActiveDraftId] = useState(null); // Track if we are editing a draft
     const [isSavedOrCancelled, setIsSavedOrCancelled] = useState(false); // Track if we should skip auto-save
 
@@ -263,7 +264,14 @@ export default function NewBill() {
     };
 
     const handleAddCustomItem = () => {
-        if (!customItemData.name || !customItemData.price) return;
+        const errors = {};
+        if (!customItemData.name.trim()) errors.name = 'Item name is required';
+        if (!customItemData.price) errors.price = 'Price is required';
+
+        if (Object.keys(errors).length > 0) {
+            setCustomItemErrors(errors);
+            return;
+        }
 
         const newItem = {
             id: 'custom-' + Date.now(),
@@ -277,6 +285,7 @@ export default function NewBill() {
         addToBill(newItem);
         setCustomItemModal(false);
         setCustomItemData({ name: '', price: '' });
+        setCustomItemErrors({});
     };
 
     // Landing screen - shown before starting a bill
@@ -448,11 +457,17 @@ export default function NewBill() {
             {/* Custom Item Modal */}
             <Modal
                 isOpen={customItemModal}
-                onClose={() => setCustomItemModal(false)}
+                onClose={() => {
+                    setCustomItemModal(false);
+                    setCustomItemErrors({});
+                }}
                 title="Add Custom Item"
                 footer={
                     <>
-                        <button className="btn btn-secondary" onClick={() => setCustomItemModal(false)}>Cancel</button>
+                        <button className="btn btn-secondary" onClick={() => {
+                            setCustomItemModal(false);
+                            setCustomItemErrors({});
+                        }}>Cancel</button>
                         <button className="btn btn-primary" onClick={handleAddCustomItem}>Add to Bill</button>
                     </>
                 }
@@ -461,21 +476,29 @@ export default function NewBill() {
                     <label className="input-label">Item Name</label>
                     <input
                         type="text"
-                        className="input"
+                        className={`input ${customItemErrors.name ? 'input-error' : ''}`}
                         placeholder="e.g. Service Charge"
                         value={customItemData.name}
-                        onChange={(e) => setCustomItemData({ ...customItemData, name: e.target.value })}
+                        onChange={(e) => {
+                            setCustomItemData({ ...customItemData, name: e.target.value });
+                            if (customItemErrors.name) setCustomItemErrors({ ...customItemErrors, name: null });
+                        }}
                     />
+                    {customItemErrors.name && <span className="text-danger text-sm">{customItemErrors.name}</span>}
                 </div>
                 <div className="input-group">
                     <label className="input-label">Price</label>
                     <input
                         type="number"
-                        className="input"
+                        className={`input ${customItemErrors.price ? 'input-error' : ''}`}
                         placeholder="0"
                         value={customItemData.price}
-                        onChange={(e) => setCustomItemData({ ...customItemData, price: e.target.value })}
+                        onChange={(e) => {
+                            setCustomItemData({ ...customItemData, price: e.target.value });
+                            if (customItemErrors.price) setCustomItemErrors({ ...customItemErrors, price: null });
+                        }}
                     />
+                    {customItemErrors.price && <span className="text-danger text-sm">{customItemErrors.price}</span>}
                 </div>
             </Modal>
 
