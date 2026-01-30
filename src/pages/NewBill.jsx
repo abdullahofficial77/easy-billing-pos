@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { getAllItems, getFavoriteItems, addBill, addDraft, getAllSettings, getPendingPayments, updateBill, getDraft, deleteDraft, updateDraft } from '../db/database';
 import { formatCurrency, formatUnitType, calculateBillTotal, formatUnitShort } from '../utils/formatters';
 import { generateModernReceiptHTML } from '../utils/receiptTemplates'; // Import new template
+import { DEFAULT_SETTINGS } from '../utils/defaultSettings';
 
 import { shareReceiptAsPDF } from '../utils/pdf';
 import { generateReceiptText, printReceipt } from '../utils/printer';
@@ -40,7 +41,7 @@ export default function NewBill() {
         const favs = await getFavoriteItems();
         setFavorites(favs);
         const sets = await getAllSettings();
-        setSettings(sets);
+        setSettings({ ...DEFAULT_SETTINGS, ...sets });
         const pending = await getPendingPayments();
         setPendingPayments(pending);
 
@@ -234,25 +235,6 @@ export default function NewBill() {
         navigate('/drafts');
     };
 
-    const handlePrint = async () => {
-        const receiptText = generateReceiptText(confirmModal.bill, settings, settings.printerSize || '58');
-        printReceipt(receiptText);
-        resetBill();
-        setConfirmModal({ open: false });
-    };
-
-    const handleShare = async () => {
-        const bill = confirmModal.bill;
-        if (!bill) return;
-
-        try {
-            const receiptText = generateReceiptText(bill, settings, settings.printerSize || '58');
-            await shareReceiptAsPDF(receiptText, settings.printerSize || '58');
-        } catch (error) {
-            console.error('Share failed:', error);
-            alert('Failed to share PDF');
-        }
-    };
 
     const resetBill = () => {
         setCustomerName('');
