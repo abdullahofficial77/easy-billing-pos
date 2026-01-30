@@ -467,6 +467,51 @@ export default function NewBill() {
         );
     }
 
+
+    const handleShare = async () => {
+        const bill = confirmModal.bill;
+        if (!bill) return;
+
+        try {
+            // Use Modern Template for PDF
+            const width = settings.printWidth || settings.printerSize || '58mm';
+            const receiptText = generateModernReceiptHTML(bill, settings, width);
+            await shareReceiptAsPDF(receiptText, width);
+        } catch (error) {
+            console.error('Share failed:', error);
+            alert('Failed to share PDF');
+        }
+    };
+
+    const handlePrint = () => {
+        const bill = confirmModal.bill;
+        if (!bill) return;
+        const width = settings.printWidth || settings.printerSize || '58mm';
+
+        // Pass full config to printer to ensure all sections (like Shop Info) render correctly
+        const config = settings.receiptConfig || {};
+        const receiptText = generateReceiptText(
+            bill,
+            settings,
+            width,
+            config.itemLayout || 'table',
+            config.labels || {},
+            config // content/sections config
+        );
+        printReceipt(receiptText, width);
+    };
+
+    const confirmCancel = () => {
+        setBillStarted(false);
+        setBillItems([]);
+        setCustomerName('');
+        setCustomerPhone('');
+        setPaidAmount('');
+        setConfirmModal({ ...confirmModal, open: false });
+        setIsSavedOrCancelled(true);
+        sessionStorage.removeItem('continueDraft');
+    };
+
     return (
         <div className="new-bill-page" style={{ paddingBottom: '100px' }}>
             {/* Custom Item Modal */}
