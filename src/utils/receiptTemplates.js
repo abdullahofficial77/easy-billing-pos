@@ -22,11 +22,11 @@ export const generateModernReceiptHTML = (bill, settings, width = '58mm') => {
         box-sizing: border-box;
     ">
         <!-- Store Header (Optional) -->
-        ${settings.storeName ? `
+        ${settings.shopName || settings.storeName ? `
             <div style="text-align: center; margin-bottom: 4px;">
-                <h2 style="margin: 0; font-size: 18px; font-weight: 700; color: #111827;">${settings.storeName}</h2>
+                <h2 style="margin: 0; font-size: 18px; font-weight: 700; color: #111827;">${settings.shopName || settings.storeName}</h2>
                 ${settings.address ? `<div style="font-size: 12px; color: #4b5563;">${settings.address}</div>` : ''}
-                ${settings.phone ? `<div style="font-size: 12px; color: #4b5563;">${settings.phone}</div>` : ''}
+                ${settings.shopPhone || settings.phone ? `<div style="font-size: 12px; color: #4b5563;">${settings.shopPhone || settings.phone}</div>` : ''}
             </div>
             <div style="border-bottom: 1px dashed #e5e7eb; margin: 12px 0;"></div>
         ` : ''}
@@ -102,7 +102,7 @@ export const generateModernReceiptHTML = (bill, settings, width = '58mm') => {
         <!-- Footer -->
         <div style="margin-top: 24px; text-align: center;">
             <div style="color: #059669; font-weight: 700; font-size: 16px; margin-bottom: 4px;">Thank You!</div>
-            ${settings.footerText ? `<div style="font-size: 12px; color: #6b7280;">${settings.footerText}</div>` : ''}
+            ${settings.receiptFooter || settings.footerText ? `<div style="font-size: 12px; color: #6b7280;">${settings.receiptFooter || settings.footerText}</div>` : ''}
             <div style="font-size: 10px; color: #9ca3af; margin-top: 12px;">Generated via Bazaar POS</div>
         </div>
     </div>
