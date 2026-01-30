@@ -4,21 +4,8 @@ import { getAllItems, getFavoriteItems, addBill, addDraft, getAllSettings, getPe
 import { formatCurrency, formatUnitType, calculateBillTotal, formatUnitShort } from '../utils/formatters';
 import { generateModernReceiptHTML } from '../utils/receiptTemplates'; // Import new template
 
-// ... (in handleShare)
-const handleShare = async () => {
-    const bill = confirmModal.bill;
-    if (!bill) return;
-
-    try {
-        // Use Modern Template for PDF
-        const width = settings.printWidth || settings.printerSize || '58mm';
-        const receiptText = generateModernReceiptHTML(bill, settings, width);
-        await shareReceiptAsPDF(receiptText, width);
-    } catch (error) {
-        console.error('Share failed:', error);
-        alert('Failed to share PDF');
-    }
-};
+import { shareReceiptAsPDF } from '../utils/pdf';
+import { generateReceiptText, printReceipt } from '../utils/printer';
 import Modal from '../components/UI/Modal';
 
 export default function NewBill() {
