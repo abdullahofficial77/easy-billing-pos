@@ -483,16 +483,6 @@ export default function NewBill() {
         printReceipt(receiptText, width);
     };
 
-    const confirmCancel = () => {
-        setBillStarted(false);
-        setBillItems([]);
-        setCustomerName('');
-        setCustomerPhone('');
-        setPaidAmount('');
-        setConfirmModal({ ...confirmModal, open: false });
-        setIsSavedOrCancelled(true);
-        sessionStorage.removeItem('continueDraft');
-    };
 
     return (
         <div className="new-bill-page" style={{ paddingBottom: '100px' }}>
