@@ -3,7 +3,7 @@ import { formatDateTime, formatCurrency, formatBillNumber, formatUnitShort } fro
 export const generateModernReceiptHTML = (bill, settings, width = '58mm') => {
     // Styles matching the Modal UI
     const fontFamily = "'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif";
-    const cssWidth = width === '80mm' ? '80mm' : '58mm';
+    const cssWidth = (width === '80mm' || width === '80') ? '80mm' : '58mm';
 
     // Calculate totals
     const total = bill.total !== undefined ? bill.total : bill.totalAmount;

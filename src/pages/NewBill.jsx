@@ -11,8 +11,9 @@ const handleShare = async () => {
 
     try {
         // Use Modern Template for PDF
-        const receiptText = generateModernReceiptHTML(bill, settings, settings.printerSize || '58');
-        await shareReceiptAsPDF(receiptText, settings.printerSize || '58');
+        const width = settings.printWidth || settings.printerSize || '58mm';
+        const receiptText = generateModernReceiptHTML(bill, settings, width);
+        await shareReceiptAsPDF(receiptText, width);
     } catch (error) {
         console.error('Share failed:', error);
         alert('Failed to share PDF');
