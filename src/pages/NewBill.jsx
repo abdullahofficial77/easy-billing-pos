@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { getAllItems, getFavoriteItems, addBill, addDraft, getAllSettings, getPendingPayments, updateBill, getDraft, deleteDraft, updateDraft } from '../db/database';
 import { formatCurrency, formatUnitType, calculateBillTotal, formatUnitShort } from '../utils/formatters';
 import { generateReceiptText, printReceipt } from '../utils/printer';
+import { shareReceiptAsPDF } from '../utils/pdf';
 import Modal from '../components/UI/Modal';
 
 export default function NewBill() {
@@ -236,6 +237,19 @@ export default function NewBill() {
         printReceipt(receiptText);
         resetBill();
         setConfirmModal({ open: false });
+    };
+
+    const handleShare = async () => {
+        const bill = confirmModal.bill;
+        if (!bill) return;
+
+        try {
+            const receiptText = generateReceiptText(bill, settings, settings.printerSize || '58');
+            await shareReceiptAsPDF(receiptText, settings.printerSize || '58');
+        } catch (error) {
+            console.error('Share failed:', error);
+            alert('Failed to share PDF');
+        }
     };
 
     const resetBill = () => {
@@ -967,8 +981,11 @@ export default function NewBill() {
                             }}>
                                 Close
                             </button>
+                            <button className="btn btn-secondary" onClick={handleShare}>
+                                📄 Save/Share PDF
+                            </button>
                             <button className="btn btn-primary" onClick={handlePrint}>
-                                🖨️ Print Receipt
+                                🖨️ Thermal Print
                             </button>
                         </>
                     ) : confirmModal.action === 'cancel' ? (

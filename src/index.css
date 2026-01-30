@@ -70,6 +70,7 @@
     --transition-smooth: 300ms cubic-bezier(0.34, 1.56, 0.64, 1);
 
     /* Layout */
+    --header-height: 60px;
     --nav-height: 65px;
     --sidebar-width: 200px;
     --sidebar-collapsed: 56px;
@@ -334,6 +335,8 @@ body {
     overflow-x: hidden;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
+    /* Ensure safe area background matches theme */
+    padding: env(safe-area-inset-top, 0) env(safe-area-inset-right, 0) env(safe-area-inset-bottom, 0) env(safe-area-inset-left, 0);
 }
 
 #root {
@@ -397,8 +400,9 @@ h4 {
 .app-container {
     display: flex;
     flex-direction: column;
-    min-height: 100vh;
-    min-height: 100dvh;
+    height: 100vh;
+    height: 100dvh;
+    overflow: hidden;
 }
 
 /* Mobile: Bottom nav, content above */
@@ -407,10 +411,12 @@ h4 {
     display: flex;
     flex-direction: column;
     padding: var(--spacing-md);
-    padding-bottom: calc(var(--nav-height) + 10px + env(safe-area-inset-bottom));
+    padding-top: calc(var(--header-height) + var(--spacing-md));
+    padding-bottom: calc(var(--nav-height) + var(--spacing-md));
     max-width: 100%;
     overflow-y: auto;
     overflow-x: hidden;
+    height: calc(100dvh - var(--header-height) - var(--nav-height));
 }
 
 
@@ -424,14 +430,17 @@ h4 {
     bottom: 0;
     left: 0;
     right: 0;
-    height: calc(var(--nav-height) + env(safe-area-inset-bottom));
+    height: var(--nav-height);
     background: var(--color-bg-secondary);
     border-top: 1px solid var(--color-border);
     display: flex;
     justify-content: space-around;
-    align-items: center;
+    align-items: flex-start;
+    padding-top: var(--spacing-sm);
+    padding-bottom: calc(var(--spacing-sm) + env(safe-area-inset-bottom, 16px));
     z-index: 100;
-    padding-bottom: env(safe-area-inset-bottom);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
 }
 
 .nav-item {
@@ -466,6 +475,37 @@ h4 {
 .nav-item:hover {
     color: var(--color-text-primary);
 }
+
+/* ===================================
+   App Header (Sticky Top)
+   =================================== */
+
+.app-header {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: var(--header-height);
+    background: var(--color-bg-secondary);
+    border-bottom: 1px solid var(--color-border);
+    padding-top: env(safe-area-inset-top, 20px);
+    padding-left: var(--spacing-md);
+    padding-right: var(--spacing-md);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 1000;
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+}
+
+.header-title {
+    font-size: 1.125rem;
+    font-weight: 700;
+    color: var(--color-text-primary);
+    text-align: center;
+}
+
 
 
 
@@ -1385,10 +1425,26 @@ h4 {
 
 .modal-footer {
     display: flex;
+    flex-wrap: wrap;
     gap: var(--spacing-sm);
     justify-content: flex-end;
     padding: var(--spacing-lg);
     border-top: 1px solid var(--color-border);
+}
+
+@media (max-width: 480px) {
+    .modal-footer {
+        flex-direction: column;
+        /* Stack vertically on mobile */
+        gap: var(--spacing-md);
+    }
+
+    .modal-footer button {
+        width: 100%;
+        /* Full width buttons */
+        padding-top: 12px;
+        padding-bottom: 12px;
+    }
 }
 
 /* ===================================

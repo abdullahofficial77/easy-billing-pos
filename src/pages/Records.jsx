@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 import { getAllBills, getBillsByDateRange, getBillsByCustomer, getBill, getAllSettings } from '../db/database';
 import { formatDateTime, formatDate, formatCurrency, formatBillNumber, getStartOfDay, getEndOfDay, getYesterdayRange, formatUnitShort } from '../utils/formatters';
 import { generateReceiptText, printReceipt } from '../utils/printer';
+import { shareReceiptAsPDF } from '../utils/pdf';
 import Modal from '../components/UI/Modal';
 
 const RECORDS_PER_PAGE = 15;
@@ -68,6 +69,19 @@ export default function Records() {
             const width = settings.printWidth || '58mm';
             const receiptText = generateReceiptText(selectedBill, settings, width);
             printReceipt(receiptText, width);
+        }
+    };
+
+    const handleShare = async () => {
+        if (selectedBill) {
+            try {
+                const width = settings.printWidth || '58mm';
+                const receiptText = generateReceiptText(selectedBill, settings, width);
+                await shareReceiptAsPDF(receiptText, width);
+            } catch (error) {
+                console.error('Share failed:', error);
+                alert('Failed to share PDF');
+            }
         }
     };
 
@@ -221,8 +235,11 @@ export default function Records() {
                         <button className="btn btn-secondary" onClick={() => setSelectedBill(null)}>
                             Close
                         </button>
+                        <button className="btn btn-secondary" onClick={handleShare}>
+                            📄 Save/Share PDF
+                        </button>
                         <button className="btn btn-primary" onClick={handlePrint}>
-                            🖨️ Print
+                            🖨️ Thermal Print
                         </button>
                     </>
                 }
