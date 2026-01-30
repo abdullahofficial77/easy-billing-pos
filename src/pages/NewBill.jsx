@@ -2,8 +2,22 @@ import { useState, useEffect, useMemo } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { getAllItems, getFavoriteItems, addBill, addDraft, getAllSettings, getPendingPayments, updateBill, getDraft, deleteDraft, updateDraft } from '../db/database';
 import { formatCurrency, formatUnitType, calculateBillTotal, formatUnitShort } from '../utils/formatters';
-import { generateReceiptText, printReceipt } from '../utils/printer';
-import { shareReceiptAsPDF } from '../utils/pdf';
+import { generateModernReceiptHTML } from '../utils/receiptTemplates'; // Import new template
+
+// ... (in handleShare)
+const handleShare = async () => {
+    const bill = confirmModal.bill;
+    if (!bill) return;
+
+    try {
+        // Use Modern Template for PDF
+        const receiptText = generateModernReceiptHTML(bill, settings, settings.printerSize || '58');
+        await shareReceiptAsPDF(receiptText, settings.printerSize || '58');
+    } catch (error) {
+        console.error('Share failed:', error);
+        alert('Failed to share PDF');
+    }
+};
 import Modal from '../components/UI/Modal';
 
 export default function NewBill() {
@@ -478,10 +492,6 @@ export default function NewBill() {
                 title="Add Custom Item"
                 footer={
                     <>
-                        <button className="btn btn-secondary" onClick={() => {
-                            setCustomItemModal(false);
-                            setCustomItemErrors({});
-                        }}>Cancel</button>
                         <button className="btn btn-primary" onClick={handleAddCustomItem}>Add to Bill</button>
                     </>
                 }
@@ -975,12 +985,6 @@ export default function NewBill() {
                 footer={
                     confirmModal.action === 'saved' ? (
                         <>
-                            <button className="btn btn-secondary" onClick={() => {
-                                resetBill();
-                                setConfirmModal({ open: false });
-                            }}>
-                                Close
-                            </button>
                             <button className="btn btn-secondary" onClick={handleShare}>
                                 📄 Save/Share PDF
                             </button>
