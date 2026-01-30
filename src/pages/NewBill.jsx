@@ -447,7 +447,6 @@ export default function NewBill() {
                     title="Update Payment"
                     footer={
                         <>
-                            <button className="btn btn-secondary" onClick={() => setEditingPayment(null)}>Cancel</button>
                             <button
                                 className="btn btn-primary"
                                 onClick={() => handleUpdatePayment(document.getElementById('edit-paid-amount').value)}

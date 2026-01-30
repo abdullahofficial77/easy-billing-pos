@@ -135,9 +135,6 @@ export default function Drafts() {
                 title="Delete Draft"
                 footer={
                     <>
-                        <button className="btn btn-secondary" onClick={() => setDeleteConfirm(null)}>
-                            Cancel
-                        </button>
                         <button className="btn btn-danger" onClick={handleDelete}>
                             Delete
                         </button>

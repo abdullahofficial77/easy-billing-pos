@@ -255,9 +255,6 @@ export default function AllItems() {
                 title={editItem ? 'Edit Item' : 'Add New Item'}
                 footer={
                     <>
-                        <button className="btn btn-secondary" onClick={() => setModalOpen(false)}>
-                            Cancel
-                        </button>
                         <button className="btn btn-primary" onClick={handleSubmit}>
                             {editItem ? 'Save Changes' : 'Add Item'}
                         </button>
@@ -367,9 +364,6 @@ export default function AllItems() {
                 title="Delete Item"
                 footer={
                     <>
-                        <button className="btn btn-secondary" onClick={() => setDeleteConfirm(null)}>
-                            Cancel
-                        </button>
                         <button className="btn btn-danger" onClick={handleDelete}>
                             Delete
                         </button>

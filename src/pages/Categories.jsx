@@ -259,18 +259,6 @@ export default function Categories() {
                 footer={
                     <>
                         <button
-                            className="btn btn-secondary"
-                            onClick={() => {
-                                setShowAddModal(false);
-                                setError('');
-                                setNewCategoryName('');
-                                setEditingCategory(null);
-                            }}
-                            disabled={isSubmitting}
-                        >
-                            Cancel
-                        </button>
-                        <button
                             className="btn btn-primary"
                             onClick={handleSaveCategory}
                             disabled={isSubmitting}
@@ -306,9 +294,6 @@ export default function Categories() {
                 title="Delete Category"
                 footer={
                     <>
-                        <button className="btn btn-secondary" onClick={() => setDeleteConfirm(null)}>
-                            Cancel
-                        </button>
                         <button
                             className="btn btn-danger"
                             onClick={async () => {
