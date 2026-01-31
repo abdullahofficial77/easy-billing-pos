@@ -16,6 +16,13 @@ export const generateReceiptText = (bill, settings, width = '58mm', itemLayout =
         footerBranding: labels.footerBranding || ''
     };
 
+    // Data Fallbacks
+    const storeName = settings.shopName || settings.storeName || '';
+    const storeAddress = settings.address || settings.shopAddress || '';
+    const storePhone = settings.phone || settings.shopPhone || '';
+    const footerText = settings.receiptFooter || settings.footerText || '';
+    const customerPhone = bill.customerPhone ? ` (${bill.customerPhone})` : '';
+
     let html = '';
 
     // Styles handled in printReceipt, here we just structure content
@@ -25,21 +32,28 @@ export const generateReceiptText = (bill, settings, width = '58mm', itemLayout =
     const rowStyle = 'display: flex; justify-content: space-between; margin-bottom: 0px;';
 
     // 1. Header Sections
-    // Shop Info
+    // Shop Info (Name, Address, Phone)
     if ((!options.sections?.shopInfo || options.sections.shopInfo.enabled)) {
-        if (settings.storeName) html += `<div style="${centerStyle} font-weight: bold; font-size: 1.1em;">${settings.storeName}</div>`;
-        if (settings.address) html += `<div style="${centerStyle}">${settings.address}</div>`;
+        if (storeName) html += `<div style="${centerStyle} font-weight: bold; font-size: 1.1em;">${storeName}</div>`;
+        if (storeAddress) html += `<div style="${centerStyle}">${storeAddress}</div>`;
+
+        // Include Phone in Shop Info block if it exists (More robust than separate section)
+        if (storePhone) html += `<div style="${centerStyle}">${storePhone}</div>`;
     }
-    // Phone
-    if ((!options.sections?.phone || options.sections.phone.enabled) && settings.phone) {
-        html += `<div style="${centerStyle}">${settings.phone}</div>`;
+    // Legacy separate Phone section check (if users relied on this specific toggle, though we included it above too)
+    // We skip it here to avoid duplication if Shop Info is enabled. 
+    // If Shop Info is DISABLED but Phone is ENABLED, we print it here.
+    else if ((!options.sections?.phone || options.sections.phone.enabled) && storePhone) {
+        html += `<div style="${centerStyle}">${storePhone}</div>`;
     }
 
     html += '<div style="margin-bottom: 8px;"></div>'; // Spacer
 
     // Customer & Date
     if (!options.sections?.customerName || options.sections.customerName.enabled) {
-        if (bill.customerName) html += `<div style="${leftStyle}"><b>${l.customer}:</b> ${bill.customerName}</div>`;
+        // Include Customer Phone in the line
+        const custName = (bill.customerName || 'Walk-in Customer') + customerPhone;
+        html += `<div style="${leftStyle}"><b>${l.customer}:</b> ${custName}</div>`;
     }
     if (!options.sections?.dateTime || options.sections.dateTime.enabled) {
         const dateStr = bill.date ? new Date(bill.date).toLocaleString() : new Date().toLocaleString();
@@ -136,8 +150,8 @@ export const generateReceiptText = (bill, settings, width = '58mm', itemLayout =
     // 4. Footer
     if (!options.sections?.footer || options.sections.footer.enabled) {
         html += '<br>';
-        if (settings.footerText) {
-            html += `<div style="${centerStyle} font-size: 0.9em;">${settings.footerText}</div>`;
+        if (footerText) {
+            html += `<div style="${centerStyle} font-size: 0.9em;">${footerText}</div>`;
         }
         if (l.footerBranding) {
             html += `<div style="${centerStyle} font-size: 0.7em; margin-top: 8px; opacity: 0.7;">${l.footerBranding}</div>`;
