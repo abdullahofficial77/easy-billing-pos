@@ -96,7 +96,8 @@ export const generateReceiptText = (bill, settings, width = '58mm', itemLayout =
 
         if (bill.items) {
             bill.items.forEach(item => {
-                const itemTotal = item.total || (item.price * item.quantity);
+                const price = item.overridePrice ?? item.price;
+                const itemTotal = item.total || (price * item.quantity);
                 const qtyStr = item.unitType === 'kg' ? `${item.quantity}kg` :
                     item.unitType === 'gram' ? `${item.quantity}g` :
                         `${item.quantity}`;
