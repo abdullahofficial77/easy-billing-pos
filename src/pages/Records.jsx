@@ -4,6 +4,7 @@ import { formatDateTime, formatDate, formatCurrency, formatBillNumber, getStartO
 import { generateReceiptText, printReceipt } from '../utils/printer';
 import { generateModernReceiptHTML } from '../utils/receiptTemplates';
 import { shareReceiptAsPDF } from '../utils/pdf';
+import { DEFAULT_SETTINGS } from '../utils/defaultSettings';
 
 // ...
 
@@ -45,7 +46,7 @@ export default function Records() {
 
     const loadSettings = async () => {
         const sets = await getAllSettings();
-        setSettings(sets);
+        setSettings({ ...DEFAULT_SETTINGS, ...sets });
     };
 
     const loadBills = async () => {
@@ -84,7 +85,17 @@ export default function Records() {
     const handlePrint = () => {
         if (selectedBill) {
             const width = settings.printWidth || '58mm';
-            const receiptText = generateReceiptText(selectedBill, settings, width);
+
+            // Pass full config to printer to ensure all sections (like Shop Info) render correctly
+            const config = settings.receiptConfig || {};
+            const receiptText = generateReceiptText(
+                selectedBill,
+                settings,
+                width,
+                config.itemLayout || 'table',
+                config.labels || {},
+                config // content/sections config
+            );
             printReceipt(receiptText, width);
         }
     };

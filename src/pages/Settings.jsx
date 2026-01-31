@@ -192,10 +192,10 @@ export default function Settings() {
             finalTotal: 300
         };
         const previewSettings = {
-            storeName: settings.storeName || 'Awais General Store',
-            address: settings.address || 'Near Govt. School, Shadiwal',
-            phone: settings.phone || '03123456789',
-            footerText: settings.footerText || 'Thanks for shopping with us'
+            storeName: settings.storeName,
+            address: settings.address,
+            phone: settings.phone,
+            footerText: settings.footerText
         };
         const itemLayout = settings.receiptConfig?.itemLayout || 'table';
         const labels = settings.receiptConfig?.labels || {};
